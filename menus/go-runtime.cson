@@ -1,0 +1,22 @@
+# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Detect Go Runtime(s)'
+      'command': 'go-runtime:detect'
+    }
+  ]
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'go-runtime'
+      'submenu': [
+        {
+          'label': 'Detect Runtime(s)'
+          'command': 'go-runtime:detect'
+        }
+      ]
+    ]
+  }
+]

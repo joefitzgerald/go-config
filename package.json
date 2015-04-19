@@ -1,0 +1,44 @@
+{
+  "name": "go-runtime",
+  "description": "Detects installed go (golang) runtime(s) and makes them available for other packages.",
+  "keywords": [
+    "go",
+    "golang",
+    "gofmt",
+    "format",
+    "fmt",
+    "goimports",
+    "gocode",
+    "vet",
+    "go fmt",
+    "go vet"
+  ],
+  "main": "./lib/go-runtime",
+  "version": "0.1.0",
+  "repository": "https://github.com/joefitzgerald/go-runtime",
+  "license": "Apache-2.0",
+  "engines": {
+    "atom": ">=0.192.0 <2.0.0"
+  },
+  "author": "Joe Fitzgerald <jfitzgerald@pivotal.io> (http://github.com/joefitzgerald)",
+  "homepage": "https://atom.io/packages/go-runtime",
+  "bugs": {
+    "url": "https://github.com/joefitzgerald/go-runtime/issues"
+  },
+  "dependencies": {
+    "fs-plus": "2.x",
+    "glob": ">=4.0.6",
+    "temp": ">=0.8.1",
+    "underscore-plus": "1.x"
+  },
+  "devDependencies": {
+    "coffeelint": ">=1.8.1"
+  },
+  "providedServices": {
+    "go.runtime": {
+      "versions": {
+        "0.1.0": "provide"
+      }
+    }
+  }
+}
