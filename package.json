@@ -1,17 +1,12 @@
 {
   "name": "go-runtime",
-  "description": "Detects installed go (golang) runtime(s) and makes them available for other packages.",
+  "description": "Detects installed go (golang) runtime(s) and makes them available for use by other packages.",
   "keywords": [
     "go",
     "golang",
-    "gofmt",
-    "format",
-    "fmt",
-    "goimports",
-    "gocode",
-    "vet",
-    "go fmt",
-    "go vet"
+    "gopath",
+    "gb",
+    "godep"
   ],
   "main": "./lib/go-runtime",
   "version": "0.2.0",
@@ -27,17 +22,25 @@
   },
   "dependencies": {
     "fs-plus": "2.x",
-    "glob": ">=4.0.6",
-    "temp": ">=0.8.1",
-    "underscore-plus": "1.x"
+    "glob": ">=5.0.14"
   },
   "devDependencies": {
-    "coffeelint": ">=1.8.1"
+    "underscore-plus": "1.x",
+    "eslint": "^1.3.1",
+    "babel-eslint": "^4.1.1",
+    "temp": ">=0.8.3"
   },
   "providedServices": {
     "go.runtime": {
       "versions": {
         "0.1.0": "provide"
+      }
+    }
+  },
+  "consumedServices": {
+    "environment": {
+      "versions": {
+        "0.1.0": "consumeEnvironment"
       }
     }
   }
