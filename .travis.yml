@@ -15,13 +15,6 @@ before_script:
   - export GOPATH="$HOME/go"
   - export PATH=$PATH:$GOPATH/bin
   - go version
-  - go get -u github.com/golang/lint/golint
-  - go get -u golang.org/x/tools/cmd/cover
-  - go get -u golang.org/x/tools/cmd/goimports
-  - go get -u golang.org/x/tools/cmd/vet
-  - go get -u golang.org/x/tools/cmd/oracle
-  - go get -u sourcegraph.com/sqs/goreturns
-  - go get -u github.com/nsf/gocode
   - popd
 
 env:
