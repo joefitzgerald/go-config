@@ -1,6 +1,7 @@
 'use babel'
 
 import {PathHelper} from './../lib/pathhelper'
+import os from 'os'
 import path from 'path'
 
 describe('pathhelper', () => {
@@ -24,10 +25,14 @@ describe('pathhelper', () => {
       expect(result).toBeTruthy()
       expect(result).toBe(path.join(pathhelper.home(), 'go', 'bin', 'goimports'))
 
-      result = pathhelper.expand(process.env, path.join('$NONEXISTENT', 'go', '..', 'bin', 'goimports'), '~/go')
+      let root = path.sep
+      if (os.platform() === 'win32') {
+        root = 'c:' + path.sep
+      }
+      result = pathhelper.expand(process.env, path.join(root, '$NONEXISTENT', 'go', '..', 'bin', 'goimports'), '~/go')
       expect(result).toBeDefined()
       expect(result).toBeTruthy()
-      expect(result).toBe(path.join(path.sep, '$NONEXISTENT', 'bin', 'goimports'))
+      expect(result).toBe(path.join(root, '$NONEXISTENT', 'bin', 'goimports'))
     })
   })
 
