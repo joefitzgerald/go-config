@@ -24,6 +24,9 @@ before_script:
   - go get -u github.com/nsf/gocode
   - popd
 
+env:
+  - APM_TEST_PACKAGES="environment"
+
 script: 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
 
 git:
