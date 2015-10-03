@@ -75,7 +75,7 @@ describe('Runtime Locator', () => {
       expect(runtimeLocator.findExecutablesInPath).toBeDefined()
       if (os.platform() === 'win32') {
         expect(runtimeLocator.findExecutablesInPath('c:\\windows\\system32', ['cmd.exe']).length).toBe(1)
-        expect(runtimeLocator.findExecutablesInPath('c:\\windows\\system32', ['cmd.exe'])[0]).toBe('c:\\windows\\system32')
+        expect(runtimeLocator.findExecutablesInPath('c:\\windows\\system32', ['cmd.exe'])[0]).toBe('c:\\windows\\system32\\cmd.exe')
       } else {
         expect(runtimeLocator.findExecutablesInPath('/bin', ['sh']).length).toBe(1)
         expect(runtimeLocator.findExecutablesInPath('/bin', ['sh'])[0]).toBe('/bin/sh')

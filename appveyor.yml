@@ -28,6 +28,7 @@ build_script:
   - SET PATH=%LOCALAPPDATA%\atom\bin;%GOPATH%\bin;%PATH%
   - apm clean
   - apm install
+  - apm install environment
   - apm test
 
 test: off
