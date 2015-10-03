@@ -59,6 +59,30 @@ describe('Runtime Locator', () => {
     readyFn = null
   })
 
+  describe('when the environment is process.env', () => {
+    it('findExecutablesInPath returns an empty array if its arguments are invalid', () => {
+      expect(runtimeLocator.findExecutablesInPath).toBeDefined()
+      expect(runtimeLocator.findExecutablesInPath(false, false).length).toBe(0)
+      expect(runtimeLocator.findExecutablesInPath('', false).length).toBe(0)
+      expect(runtimeLocator.findExecutablesInPath('abcd', false).length).toBe(0)
+      expect(runtimeLocator.findExecutablesInPath('abcd', {bleh: 'abcd'}).length).toBe(0)
+      expect(runtimeLocator.findExecutablesInPath('abcd', 'abcd').length).toBe(0)
+      expect(runtimeLocator.findExecutablesInPath('abcd', []).length).toBe(0)
+      expect(runtimeLocator.findExecutablesInPath([], []).length).toBe(0)
+    })
+
+    it('findExecutablesInPath returns an array with elements if its arguments are valid', () => {
+      expect(runtimeLocator.findExecutablesInPath).toBeDefined()
+      if (os.platform() === 'win32') {
+        expect(runtimeLocator.findExecutablesInPath('c:\\windows\\system32', ['cmd.exe']).length).toBe(1)
+        expect(runtimeLocator.findExecutablesInPath('c:\\windows\\system32', ['cmd.exe'])[0]).toBe('c:\\windows\\system32')
+      } else {
+        expect(runtimeLocator.findExecutablesInPath('/bin', ['sh']).length).toBe(1)
+        expect(runtimeLocator.findExecutablesInPath('/bin', ['sh'])[0]).toBe('/bin/sh')
+      }
+    })
+  })
+
   describe('when the environment has a GOPATH that includes a tilde', () => {
     beforeEach(() => {
       env.GOPATH = path.join('~', 'go')
