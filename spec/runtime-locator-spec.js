@@ -217,7 +217,7 @@ describe('Runtime Locator', () => {
       expect(runtimes.length).toBeGreaterThan(1)
       expect(runtimes[0].name).toBe('go1.5.1')
       expect(runtimes[0].semver).toBe('1.5.1')
-      expect(runtimes[0].version).toBe('go version go1.5.1 darwin/amd64')
+      expect(runtimes[0].version).toBe('go version go1.5.1 ' + arch + '/amd64')
       expect(runtimes[0].path).toBe(go)
       expect(runtimes[0].GOARCH).toBe('amd64')
       expect(runtimes[0].GOBIN).toBe('')
