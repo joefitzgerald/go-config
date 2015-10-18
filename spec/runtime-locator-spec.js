@@ -5,7 +5,7 @@ import {Executor} from './../lib/executor'
 import {PathHelper} from './../lib/pathhelper'
 import {RuntimeLocator} from './../lib/runtime-locator'
 import temp from 'temp'
-import fs from 'fs'
+import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
 
@@ -13,6 +13,7 @@ describe('Runtime Locator', () => {
   let env = null
   let environmentFn = null
   let executor = null
+  let arch = null
   let executableSuffix = null
   let pathhelper = null
   let pathkey = null
@@ -27,10 +28,12 @@ describe('Runtime Locator', () => {
       return env
     }
     readyFn = () => { return true }
+    arch = process.platform
     executor = new Executor({environmentFn: environmentFn})
     executableSuffix = ''
     pathkey = 'PATH'
     if (os.platform() === 'win32') {
+      arch = 'windows'
       executableSuffix = '.exe'
       pathkey = 'Path'
     }
@@ -53,6 +56,7 @@ describe('Runtime Locator', () => {
       runtimeLocator = null
     }
 
+    arch = null
     environmentFn = null
     executableSuffix = null
     pathkey = null
@@ -131,6 +135,7 @@ describe('Runtime Locator', () => {
       go = path.join(godir, 'go' + executableSuffix)
       fs.writeFileSync(go, '', {encoding: 'utf8', mode: 511})
       env[pathkey] = godir
+      env.GOPATH = path.join('~', 'go')
     })
 
     it('runtimeCandidates() finds the runtime', () => {
@@ -177,6 +182,76 @@ describe('Runtime Locator', () => {
       if (candidates.length > 2) {
         expect(candidates[2]).not.toBe(go)
       }
+    })
+  })
+
+  describe('when the path includes a directory with go 1.5.1 in it', () => {
+    let godir = null
+    let gopathdir = null
+    let go = null
+    beforeEach(() => {
+      godir = temp.mkdirSync('go-')
+      gopathdir = temp.mkdirSync('gopath-')
+      let fakeexecutable = 'go_' + arch + '_amd64' + executableSuffix
+      let go151json = path.join(__dirname, 'fixtures', 'go-151-' + arch + '.json')
+      let fakego = path.join(__dirname, 'tools', 'go', fakeexecutable)
+      go = path.join(godir, 'go' + executableSuffix)
+      fs.copySync(fakego, go)
+      fs.copySync(go151json, path.join(godir, 'go.json'))
+      env[pathkey] = godir
+      env['GOPATH'] = gopathdir
+    })
+
+    it('runtimeCandidates() finds the runtime', () => {
+      expect(runtimeLocator.runtimeCandidates).toBeDefined()
+      let candidates = runtimeLocator.runtimeCandidates()
+      expect(candidates).toBeTruthy()
+      expect(candidates.length).toBeGreaterThan(0)
+      expect(candidates[0]).toBe(go)
+    })
+
+    it('runtimes() returns the runtime', () => {
+      expect(runtimeLocator.runtimes).toBeDefined()
+      let runtimes = runtimeLocator.runtimes()
+      expect(runtimes).toBeTruthy()
+      expect(runtimes.length).toBeGreaterThan(1)
+      expect(runtimes[0].name).toBe('go1.5.1')
+      expect(runtimes[0].semver).toBe('1.5.1')
+      expect(runtimes[0].version).toBe('go version go1.5.1 darwin/amd64')
+      expect(runtimes[0].path).toBe(go)
+      expect(runtimes[0].GOARCH).toBe('amd64')
+      expect(runtimes[0].GOBIN).toBe('')
+      if (os.platform() === 'win32') {
+        expect(runtimes[0].GOEXE).toBe('.exe')
+      } else {
+        expect(runtimes[0].GOEXE).toBe('')
+      }
+      expect(runtimes[0].GOHOSTARCH).toBe('amd64')
+      expect(runtimes[0].GOHOSTOS).toBe(arch)
+      expect(runtimes[0].GOOS).toBe(arch)
+      expect(runtimes[0].GOPATH).toBe(gopathdir)
+      expect(runtimes[0].GORACE).toBe('')
+      if (os.platform() === 'win32') {
+        expect(runtimes[0].GOROOT).toBe('c:\\go')
+        expect(runtimes[0].GOTOOLDIR).toBe('c:\\go\\pkg\\tool\\windows_amd64')
+        expect(runtimes[0].CC).toBe('gcc')
+        expect(runtimes[0].GOGCCFLAGS).toBe('-m64 -mthreads -fmessage-length=0')
+        expect(runtimes[0].CXX).toBe('g++')
+      } else if (os.platform() === 'darwin') {
+        expect(runtimes[0].GOROOT).toBe('/usr/local/Cellar/go/1.5.1/libexec')
+        expect(runtimes[0].GOTOOLDIR).toBe('/usr/local/Cellar/go/1.5.1/libexec/pkg/tool/darwin_amd64')
+        expect(runtimes[0].CC).toBe('clang')
+        expect(runtimes[0].GOGCCFLAGS).toBe('-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fno-common')
+        expect(runtimes[0].CXX).toBe('clang++')
+      } else if (os.platform() === 'linux') {
+        expect(runtimes[0].GOROOT).toBe('/usr/local/go')
+        expect(runtimes[0].GOTOOLDIR).toBe('/usr/local/go/pkg/tool/linux_amd64')
+        expect(runtimes[0].CC).toBe('gcc')
+        expect(runtimes[0].GOGCCFLAGS).toBe('-fPIC -m64 -pthread -fmessage-length=0')
+        expect(runtimes[0].CXX).toBe('g++')
+      }
+      expect(runtimes[0].GO15VENDOREXPERIMENT).toBe('')
+      expect(runtimes[0].CGO_ENABLED).toBe('1')
     })
   })
 })
