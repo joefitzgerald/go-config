@@ -3,13 +3,13 @@
 import {isTruthy} from './../lib/check'
 import {Executor} from './../lib/executor'
 import {PathHelper} from './../lib/pathhelper'
-import {RuntimeLocator} from './../lib/runtime-locator'
+import {Locator} from './../lib/locator'
 import temp from 'temp'
 import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
 
-describe('Runtime Locator', () => {
+describe('Locator', () => {
   let env = null
   let environmentFn = null
   let executor = null
@@ -18,7 +18,7 @@ describe('Runtime Locator', () => {
   let pathhelper = null
   let pathkey = null
   let readyFn = null
-  let runtimeLocator = null
+  let locator = null
 
   beforeEach(() => {
     temp.track()
@@ -38,7 +38,7 @@ describe('Runtime Locator', () => {
       pathkey = 'Path'
     }
 
-    runtimeLocator = new RuntimeLocator({
+    locator = new Locator({
       environment: environmentFn,
       executor: executor,
       ready: readyFn
@@ -51,9 +51,9 @@ describe('Runtime Locator', () => {
       executor = null
     }
 
-    if (runtimeLocator !== null) {
-      runtimeLocator.dispose()
-      runtimeLocator = null
+    if (locator !== null) {
+      locator.dispose()
+      locator = null
     }
 
     arch = null
@@ -65,24 +65,24 @@ describe('Runtime Locator', () => {
 
   describe('when the environment is process.env', () => {
     it('findExecutablesInPath returns an empty array if its arguments are invalid', () => {
-      expect(runtimeLocator.findExecutablesInPath).toBeDefined()
-      expect(runtimeLocator.findExecutablesInPath(false, false).length).toBe(0)
-      expect(runtimeLocator.findExecutablesInPath('', false).length).toBe(0)
-      expect(runtimeLocator.findExecutablesInPath('abcd', false).length).toBe(0)
-      expect(runtimeLocator.findExecutablesInPath('abcd', {bleh: 'abcd'}).length).toBe(0)
-      expect(runtimeLocator.findExecutablesInPath('abcd', 'abcd').length).toBe(0)
-      expect(runtimeLocator.findExecutablesInPath('abcd', []).length).toBe(0)
-      expect(runtimeLocator.findExecutablesInPath([], []).length).toBe(0)
+      expect(locator.findExecutablesInPath).toBeDefined()
+      expect(locator.findExecutablesInPath(false, false).length).toBe(0)
+      expect(locator.findExecutablesInPath('', false).length).toBe(0)
+      expect(locator.findExecutablesInPath('abcd', false).length).toBe(0)
+      expect(locator.findExecutablesInPath('abcd', {bleh: 'abcd'}).length).toBe(0)
+      expect(locator.findExecutablesInPath('abcd', 'abcd').length).toBe(0)
+      expect(locator.findExecutablesInPath('abcd', []).length).toBe(0)
+      expect(locator.findExecutablesInPath([], []).length).toBe(0)
     })
 
     it('findExecutablesInPath returns an array with elements if its arguments are valid', () => {
-      expect(runtimeLocator.findExecutablesInPath).toBeDefined()
+      expect(locator.findExecutablesInPath).toBeDefined()
       if (os.platform() === 'win32') {
-        expect(runtimeLocator.findExecutablesInPath('c:\\windows\\system32', ['cmd.exe']).length).toBe(1)
-        expect(runtimeLocator.findExecutablesInPath('c:\\windows\\system32', ['cmd.exe'])[0]).toBe('c:\\windows\\system32\\cmd.exe')
+        expect(locator.findExecutablesInPath('c:\\windows\\system32', ['cmd.exe']).length).toBe(1)
+        expect(locator.findExecutablesInPath('c:\\windows\\system32', ['cmd.exe'])[0]).toBe('c:\\windows\\system32\\cmd.exe')
       } else {
-        expect(runtimeLocator.findExecutablesInPath('/bin', ['sh']).length).toBe(1)
-        expect(runtimeLocator.findExecutablesInPath('/bin', ['sh'])[0]).toBe('/bin/sh')
+        expect(locator.findExecutablesInPath('/bin', ['sh']).length).toBe(1)
+        expect(locator.findExecutablesInPath('/bin', ['sh'])[0]).toBe('/bin/sh')
       }
     })
   })
@@ -93,13 +93,13 @@ describe('Runtime Locator', () => {
     })
 
     it('is defined', () => {
-      expect(runtimeLocator).toBeDefined()
-      expect(runtimeLocator).toBeTruthy()
+      expect(locator).toBeDefined()
+      expect(locator).toBeTruthy()
     })
 
     it('gopath() returns a path with the home directory expanded', () => {
-      expect(runtimeLocator.gopath).toBeDefined()
-      expect(runtimeLocator.gopath()).toBe(path.join(pathhelper.home(), 'go'))
+      expect(locator.gopath).toBeDefined()
+      expect(locator.gopath()).toBe(path.join(pathhelper.home(), 'go'))
     })
   })
 
@@ -111,8 +111,8 @@ describe('Runtime Locator', () => {
     })
 
     it('gopath() returns false', () => {
-      expect(runtimeLocator.gopath).toBeDefined()
-      expect(runtimeLocator.gopath()).toBe(false)
+      expect(locator.gopath).toBeDefined()
+      expect(locator.gopath()).toBe(false)
     })
   })
 
@@ -122,8 +122,8 @@ describe('Runtime Locator', () => {
     })
 
     it('gopath() returns false', () => {
-      expect(runtimeLocator.gopath).toBeDefined()
-      expect(runtimeLocator.gopath()).toBe(false)
+      expect(locator.gopath).toBeDefined()
+      expect(locator.gopath()).toBe(false)
     })
   })
 
@@ -139,8 +139,8 @@ describe('Runtime Locator', () => {
     })
 
     it('runtimeCandidates() finds the runtime', () => {
-      expect(runtimeLocator.runtimeCandidates).toBeDefined()
-      let candidates = runtimeLocator.runtimeCandidates()
+      expect(locator.runtimeCandidates).toBeDefined()
+      let candidates = locator.runtimeCandidates()
       expect(candidates).toBeTruthy()
       expect(candidates.length).toBeGreaterThan(0)
       expect(candidates[0]).toBe(go)
@@ -163,8 +163,8 @@ describe('Runtime Locator', () => {
     })
 
     it('runtimeCandidates() returns the candidates in the correct order', () => {
-      expect(runtimeLocator.runtimeCandidates).toBeDefined()
-      let candidates = runtimeLocator.runtimeCandidates()
+      expect(locator.runtimeCandidates).toBeDefined()
+      let candidates = locator.runtimeCandidates()
       expect(candidates).toBeTruthy()
       expect(candidates.length).toBeGreaterThan(1)
       expect(candidates[0]).toBe(go)
@@ -173,8 +173,8 @@ describe('Runtime Locator', () => {
 
     it('runtimeCandidates() returns candidates in the correct order when a candidate occurs multiple times in the path', () => {
       env[pathkey] = godir + path.delimiter + go1dir + path.delimiter + godir
-      expect(runtimeLocator.runtimeCandidates).toBeDefined()
-      let candidates = runtimeLocator.runtimeCandidates()
+      expect(locator.runtimeCandidates).toBeDefined()
+      let candidates = locator.runtimeCandidates()
       expect(candidates).toBeTruthy()
       expect(candidates.length).toBeGreaterThan(1)
       expect(candidates[0]).toBe(go)
@@ -203,16 +203,16 @@ describe('Runtime Locator', () => {
     })
 
     it('runtimeCandidates() finds the runtime', () => {
-      expect(runtimeLocator.runtimeCandidates).toBeDefined()
-      let candidates = runtimeLocator.runtimeCandidates()
+      expect(locator.runtimeCandidates).toBeDefined()
+      let candidates = locator.runtimeCandidates()
       expect(candidates).toBeTruthy()
       expect(candidates.length).toBeGreaterThan(0)
       expect(candidates[0]).toBe(go)
     })
 
     it('runtimes() returns the runtime', () => {
-      expect(runtimeLocator.runtimes).toBeDefined()
-      let runtimes = runtimeLocator.runtimes()
+      expect(locator.runtimes).toBeDefined()
+      let runtimes = locator.runtimes()
       expect(runtimes).toBeTruthy()
       expect(runtimes.length).toBeGreaterThan(1)
       expect(runtimes[0].name).toBe('go1.5.1')

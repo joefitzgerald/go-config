@@ -28,34 +28,23 @@ describe('go-runtime', () => {
       expect(goruntimeMain.subscriptions).toBeTruthy()
       expect(goruntimeMain.environment).toBeDefined()
       expect(goruntimeMain.environment).toBeTruthy()
-      goruntimeMain.getRuntimeLocator()
-      expect(goruntimeMain.runtimeLocator).toBeDefined()
-      expect(goruntimeMain.runtimeLocator).toBeTruthy()
-      goruntimeMain.getToolLocator()
-      expect(goruntimeMain.toolLocator).toBeDefined()
-      expect(goruntimeMain.toolLocator).toBeTruthy()
+      goruntimeMain.getLocator()
+      expect(goruntimeMain.locator).toBeDefined()
+      expect(goruntimeMain.locator).toBeTruthy()
 
       goruntimeMain.dispose()
       expect(goruntimeMain.subscriptions).toBeFalsy()
       expect(goruntimeMain.environment).toBeFalsy()
-      expect(goruntimeMain.runtimeLocator).toBeFalsy()
-      expect(goruntimeMain.toolLocator).toBeFalsy()
+      expect(goruntimeMain.locator).toBeFalsy()
 
       goruntimeMain.activate()
     })
 
-    it('gets a runtimeLocator', () => {
-      expect(goruntimeMain.getRuntimeLocator).toBeDefined()
-      let runtimeLocator = goruntimeMain.getRuntimeLocator()
-      expect(runtimeLocator).toBeDefined()
-      expect(runtimeLocator).toBeTruthy()
-    })
-
-    it('gets a toolLocator', () => {
-      expect(goruntimeMain.getToolLocator).toBeDefined()
-      let toolLocator = goruntimeMain.getToolLocator()
-      expect(toolLocator).toBeDefined()
-      expect(toolLocator).toBeTruthy()
+    it('gets a Locator', () => {
+      expect(goruntimeMain.getLocator).toBeDefined()
+      let locator = goruntimeMain.getLocator()
+      expect(locator).toBeDefined()
+      expect(locator).toBeTruthy()
     })
 
     it('gets an executor', () => {
@@ -75,8 +64,7 @@ describe('go-runtime', () => {
       let provider = goruntimeMain.provide()
       expect(provider).toBeTruthy()
       expect(provider.executor).toBeTruthy()
-      expect(provider.runtime).toBeTruthy()
-      expect(provider.tools).toBeTruthy()
+      expect(provider.locator).toBeTruthy()
     })
   })
 
