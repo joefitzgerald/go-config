@@ -212,46 +212,52 @@ describe('Locator', () => {
 
     it('runtimes() returns the runtime', () => {
       expect(locator.runtimes).toBeDefined()
-      let runtimes = locator.runtimes()
-      expect(runtimes).toBeTruthy()
-      expect(runtimes.length).toBeGreaterThan(1)
-      expect(runtimes[0].name).toBe('go1.5.1')
-      expect(runtimes[0].semver).toBe('1.5.1')
-      expect(runtimes[0].version).toBe('go version go1.5.1 ' + arch + '/amd64')
-      expect(runtimes[0].path).toBe(go)
-      expect(runtimes[0].GOARCH).toBe('amd64')
-      expect(runtimes[0].GOBIN).toBe('')
-      if (os.platform() === 'win32') {
-        expect(runtimes[0].GOEXE).toBe('.exe')
-      } else {
-        expect(runtimes[0].GOEXE).toBe('')
-      }
-      expect(runtimes[0].GOHOSTARCH).toBe('amd64')
-      expect(runtimes[0].GOHOSTOS).toBe(arch)
-      expect(runtimes[0].GOOS).toBe(arch)
-      expect(runtimes[0].GOPATH).toBe(gopathdir)
-      expect(runtimes[0].GORACE).toBe('')
-      if (os.platform() === 'win32') {
-        expect(runtimes[0].GOROOT).toBe('c:\\go')
-        expect(runtimes[0].GOTOOLDIR).toBe('c:\\go\\pkg\\tool\\windows_amd64')
-        expect(runtimes[0].CC).toBe('gcc')
-        expect(runtimes[0].GOGCCFLAGS).toBe('-m64 -mthreads -fmessage-length=0')
-        expect(runtimes[0].CXX).toBe('g++')
-      } else if (os.platform() === 'darwin') {
-        expect(runtimes[0].GOROOT).toBe('/usr/local/Cellar/go/1.5.1/libexec')
-        expect(runtimes[0].GOTOOLDIR).toBe('/usr/local/Cellar/go/1.5.1/libexec/pkg/tool/darwin_amd64')
-        expect(runtimes[0].CC).toBe('clang')
-        expect(runtimes[0].GOGCCFLAGS).toBe('-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fno-common')
-        expect(runtimes[0].CXX).toBe('clang++')
-      } else if (os.platform() === 'linux') {
-        expect(runtimes[0].GOROOT).toBe('/usr/local/go')
-        expect(runtimes[0].GOTOOLDIR).toBe('/usr/local/go/pkg/tool/linux_amd64')
-        expect(runtimes[0].CC).toBe('gcc')
-        expect(runtimes[0].GOGCCFLAGS).toBe('-fPIC -m64 -pthread -fmessage-length=0')
-        expect(runtimes[0].CXX).toBe('g++')
-      }
-      expect(runtimes[0].GO15VENDOREXPERIMENT).toBe('')
-      expect(runtimes[0].CGO_ENABLED).toBe('1')
+      let runtimes = null
+      locator.runtimes().then((r) => { runtimes = r })
+
+      waitsFor(() => { return isTruthy(runtimes) })
+
+      runs(() => {
+        expect(runtimes).toBeTruthy()
+        expect(runtimes.length).toBeGreaterThan(1)
+        expect(runtimes[0].name).toBe('go1.5.1')
+        expect(runtimes[0].semver).toBe('1.5.1')
+        expect(runtimes[0].version).toBe('go version go1.5.1 ' + arch + '/amd64')
+        expect(runtimes[0].path).toBe(go)
+        expect(runtimes[0].GOARCH).toBe('amd64')
+        expect(runtimes[0].GOBIN).toBe('')
+        if (os.platform() === 'win32') {
+          expect(runtimes[0].GOEXE).toBe('.exe')
+        } else {
+          expect(runtimes[0].GOEXE).toBe('')
+        }
+        expect(runtimes[0].GOHOSTARCH).toBe('amd64')
+        expect(runtimes[0].GOHOSTOS).toBe(arch)
+        expect(runtimes[0].GOOS).toBe(arch)
+        expect(runtimes[0].GOPATH).toBe(gopathdir)
+        expect(runtimes[0].GORACE).toBe('')
+        if (os.platform() === 'win32') {
+          expect(runtimes[0].GOROOT).toBe('c:\\go')
+          expect(runtimes[0].GOTOOLDIR).toBe('c:\\go\\pkg\\tool\\windows_amd64')
+          expect(runtimes[0].CC).toBe('gcc')
+          expect(runtimes[0].GOGCCFLAGS).toBe('-m64 -mthreads -fmessage-length=0')
+          expect(runtimes[0].CXX).toBe('g++')
+        } else if (os.platform() === 'darwin') {
+          expect(runtimes[0].GOROOT).toBe('/usr/local/Cellar/go/1.5.1/libexec')
+          expect(runtimes[0].GOTOOLDIR).toBe('/usr/local/Cellar/go/1.5.1/libexec/pkg/tool/darwin_amd64')
+          expect(runtimes[0].CC).toBe('clang')
+          expect(runtimes[0].GOGCCFLAGS).toBe('-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fno-common')
+          expect(runtimes[0].CXX).toBe('clang++')
+        } else if (os.platform() === 'linux') {
+          expect(runtimes[0].GOROOT).toBe('/usr/local/go')
+          expect(runtimes[0].GOTOOLDIR).toBe('/usr/local/go/pkg/tool/linux_amd64')
+          expect(runtimes[0].CC).toBe('gcc')
+          expect(runtimes[0].GOGCCFLAGS).toBe('-fPIC -m64 -pthread -fmessage-length=0')
+          expect(runtimes[0].CXX).toBe('g++')
+        }
+        expect(runtimes[0].GO15VENDOREXPERIMENT).toBe('')
+        expect(runtimes[0].CGO_ENABLED).toBe('1')
+      })
     })
   })
 })
