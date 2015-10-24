@@ -213,9 +213,9 @@ describe('Locator', () => {
     it('runtimes() returns the runtime', () => {
       expect(locator.runtimes).toBeDefined()
       let runtimes = null
-      locator.runtimes().then((r) => { runtimes = r })
+      let done = locator.runtimes().then((r) => { runtimes = r })
 
-      waitsFor(() => { return isTruthy(runtimes) })
+      waitsForPromise(() => { return done })
 
       runs(() => {
         expect(runtimes).toBeTruthy()
@@ -257,6 +257,82 @@ describe('Locator', () => {
         }
         expect(runtimes[0].GO15VENDOREXPERIMENT).toBe('')
         expect(runtimes[0].CGO_ENABLED).toBe('1')
+      })
+    })
+
+    it('findTool() finds the go tool', () => {
+      expect(locator.findTool).toBeDefined()
+      let tool = null
+      let done = locator.findTool('go', false, null).then((t) => { tool = t })
+
+      waitsForPromise(() => { return done })
+
+      runs(() => {
+        expect(tool).toBeTruthy()
+        if (os.platform() === 'win32') {
+          expect(tool).toBe('c:\\go\\bin\\go.exe')
+        } else if (os.platform() === 'darwin') {
+          expect(tool).toBe('/usr/local/Cellar/go/1.5.1/libexec/bin/go')
+        } else if (os.platform() === 'linux') {
+          expect(tool).toBe('/usr/local/go/bin/go')
+        }
+      })
+    })
+
+    it('findTool() finds tools in GOROOT', () => {
+      let tools = ['go', 'godoc', 'gofmt']
+      let runtime = false
+      let tool = null
+      let toolPath = false
+      let done = locator.runtimeForProject(false).then((r) => { runtime = r })
+
+      waitsForPromise(() => { return done })
+
+      runs(() => {
+        for (let toolItem of tools) {
+          tool = null
+          done = null
+          toolPath = path.join(runtime.GOROOT, 'bin', toolItem + runtime.GOEXE)
+          done = locator.findTool(toolItem, false, null).then((t) => { tool = t })
+          waitsForPromise(() => { return done })
+
+          runs(() => {
+            expect(tool).toBeTruthy()
+            expect(tool).toBe(toolPath)
+          })
+        }
+      })
+    })
+
+    it('stat() returns false for nonexistent files', () => {
+      let stat = null
+      let done = locator.stat('nonexistentthing').then((s) => { stat = s })
+      waitsForPromise(() => { return done })
+
+      runs(() => {
+        expect(stat).toBe(false)
+      })
+    })
+
+    it('findTool() finds tools in GOTOOLDIR', () => {
+      let tools = ['addr2line', 'cgo', 'dist', 'link', 'pack', 'trace', 'api', 'compile', 'doc', 'nm', 'pprof', 'vet', 'asm', 'cover', 'fix', 'objdump', 'yacc']
+      let runtime = false
+      let done = locator.runtimeForProject(false).then((r) => { runtime = r })
+
+      waitsForPromise(() => { return done })
+
+      runs(() => {
+        for (let toolItem of tools) {
+          let tool = null
+          let toolPath = path.join(runtime.GOTOOLDIR, toolItem + runtime.GOEXE)
+          let done = locator.findTool(toolItem, false, null).then((t) => { tool = t })
+          waitsForPromise(() => { return done })
+
+          runs(() => {
+            expect(tool).toBeTruthy()
+            expect(tool).toBe(toolPath)
+          })
+        }
       })
     })
   })
