@@ -5,9 +5,17 @@ notifications:
     on_success: never
     on_failure: change
 
-before_install:
-  - brew update
-  - if brew outdated | grep -qx go; then brew upgrade go; fi
+sudo: required
+
+os:
+  - linux
+  - osx
+
+language: go
+
+go:
+  - 1.5.1
+  - tip
 
 before_script:
   - pushd $HOME
@@ -15,12 +23,13 @@ before_script:
   - export GOPATH="$HOME/go"
   - export PATH=$PATH:$GOPATH/bin
   - go version
+  - go env
   - popd
 
 env:
   - APM_TEST_PACKAGES="environment"
 
-script: 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
+script: './build-package.sh'
 
 git:
   depth: 10
