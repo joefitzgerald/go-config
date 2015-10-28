@@ -8,17 +8,20 @@ notifications:
 sudo: required
 
 os:
-  - linux
+  # - linux
   - osx
 
 language: go
 
 go:
   - 1.5.1
-  - tip
+  # - tip
 
 before_script:
+  - set
+  - go env
   - pushd $HOME
+  - ls -al
   - mkdir -p go
   - export GOPATH="$HOME/go"
   - export PATH=$PATH:$GOPATH/bin
