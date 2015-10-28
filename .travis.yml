@@ -20,7 +20,10 @@ go:
 env:
   - APM_TEST_PACKAGES="environment"
 
-script: './build-package.sh'
+script:
+  - pushd $TRAVIS_BUILD_DIR
+  - ls -al
+  - ./build-package.sh
 
 git:
   depth: 10
