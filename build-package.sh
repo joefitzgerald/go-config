@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "Downloading latest Atom release..."
 [ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_URL=https://atom.io/download/mac || ATOM_DOWNLOAD_URL=https://atom.io/download/deb
@@ -18,7 +18,7 @@ then
     export APM_SH=./atom/Atom.app/Contents/Resources/app/apm/node_modules/.bin/apm
 else
     sudo apt-get install gdebi-core
-    sudo gdebi atom.deb
+    sudo gdebi -n atom.deb
     export ATOM_SH="atom"
     export APM_SH="apm"
 fi
