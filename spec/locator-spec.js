@@ -8,11 +8,13 @@ import temp from 'temp'
 import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
+import touch from 'touch'
 
 describe('Locator', () => {
   let env = null
   let environmentFn = null
   let executor = null
+  let platform = null
   let arch = null
   let executableSuffix = null
   let pathhelper = null
@@ -28,12 +30,19 @@ describe('Locator', () => {
       return env
     }
     readyFn = () => { return true }
-    arch = process.platform
+    platform = process.platform
+    if (process.arch === 'arm') {
+      arch = 'arm'
+    } else if (process.arch === 'ia32') {
+      arch = '386'
+    } else {
+      arch = 'amd64'
+    }
     executor = new Executor({environmentFn: environmentFn})
     executableSuffix = ''
     pathkey = 'PATH'
-    if (os.platform() === 'win32') {
-      arch = 'windows'
+    if (process.platform === 'win32') {
+      platform = 'windows'
       executableSuffix = '.exe'
       pathkey = 'Path'
     }
@@ -57,6 +66,7 @@ describe('Locator', () => {
     }
 
     arch = null
+    platform = null
     environmentFn = null
     executableSuffix = null
     pathkey = null
@@ -188,18 +198,38 @@ describe('Locator', () => {
   describe('when the path includes a directory with go 1.5.1 in it', () => {
     let godir = null
     let gopathdir = null
+    let gorootdir = null
+    let gorootbindir = null
+    let gotooldir = null
     let go = null
+    let gorootbintools = null
+    let gotooldirtools = null
     beforeEach(() => {
+      gorootbintools = ['go', 'godoc', 'gofmt']
+      gotooldirtools = ['addr2line', 'cgo', 'dist', 'link', 'pack', 'trace', 'api', 'compile', 'doc', 'nm', 'pprof', 'vet', 'asm', 'cover', 'fix', 'objdump', 'yacc']
       godir = temp.mkdirSync('go-')
       gopathdir = temp.mkdirSync('gopath-')
-      let fakeexecutable = 'go_' + arch + '_amd64' + executableSuffix
-      let go151json = path.join(__dirname, 'fixtures', 'go-151-' + arch + '.json')
+      gorootdir = temp.mkdirSync('goroot-')
+      gorootbindir = path.join(gorootdir, 'bin')
+      fs.mkdirSync(gorootbindir)
+      gotooldir = path.join(gorootdir, 'pkg', 'tool', platform + '_' + arch)
+      fs.mkdirsSync(gotooldir)
+      let fakeexecutable = 'go_' + platform + '_' + arch + executableSuffix
+      let go151json = path.join(__dirname, 'fixtures', 'go-151-' + platform + '.json')
       let fakego = path.join(__dirname, 'tools', 'go', fakeexecutable)
       go = path.join(godir, 'go' + executableSuffix)
       fs.copySync(fakego, go)
       fs.copySync(go151json, path.join(godir, 'go.json'))
       env[pathkey] = godir
       env['GOPATH'] = gopathdir
+      env['GOROOT'] = gorootdir
+      for (let tool of gorootbintools) {
+        touch.sync(path.join(gorootbindir, tool + executableSuffix))
+      }
+      for (let tool of gotooldirtools) {
+        let toolpath = path.join(gotooldir, tool + executableSuffix)
+        touch.sync(toolpath)
+      }
     })
 
     it('runtimeCandidates() finds the runtime', () => {
@@ -222,35 +252,31 @@ describe('Locator', () => {
         expect(runtimes.length).toBeGreaterThan(1)
         expect(runtimes[0].name).toBe('go1.5.1')
         expect(runtimes[0].semver).toBe('1.5.1')
-        expect(runtimes[0].version).toBe('go version go1.5.1 ' + arch + '/amd64')
+        expect(runtimes[0].version).toBe('go version go1.5.1 ' + platform + '/' + arch)
         expect(runtimes[0].path).toBe(go)
-        expect(runtimes[0].GOARCH).toBe('amd64')
+        expect(runtimes[0].GOARCH).toBe(arch)
         expect(runtimes[0].GOBIN).toBe('')
-        if (os.platform() === 'win32') {
+        if (platform === 'windows') {
           expect(runtimes[0].GOEXE).toBe('.exe')
         } else {
           expect(runtimes[0].GOEXE).toBe('')
         }
-        expect(runtimes[0].GOHOSTARCH).toBe('amd64')
-        expect(runtimes[0].GOHOSTOS).toBe(arch)
-        expect(runtimes[0].GOOS).toBe(arch)
+        expect(runtimes[0].GOHOSTARCH).toBe(arch)
+        expect(runtimes[0].GOHOSTOS).toBe(platform)
+        expect(runtimes[0].GOOS).toBe(platform)
         expect(runtimes[0].GOPATH).toBe(gopathdir)
         expect(runtimes[0].GORACE).toBe('')
-        if (os.platform() === 'win32') {
-          expect(runtimes[0].GOROOT).toBe('c:\\go')
-          expect(runtimes[0].GOTOOLDIR).toBe('c:\\go\\pkg\\tool\\windows_amd64')
+        expect(runtimes[0].GOROOT).toBe(gorootdir)
+        expect(runtimes[0].GOTOOLDIR).toBe(gotooldir)
+        if (platform === 'windows') {
           expect(runtimes[0].CC).toBe('gcc')
           expect(runtimes[0].GOGCCFLAGS).toBe('-m64 -mthreads -fmessage-length=0')
           expect(runtimes[0].CXX).toBe('g++')
-        } else if (os.platform() === 'darwin') {
-          expect(runtimes[0].GOROOT).toBe('/usr/local/Cellar/go/1.5.1/libexec')
-          expect(runtimes[0].GOTOOLDIR).toBe('/usr/local/Cellar/go/1.5.1/libexec/pkg/tool/darwin_amd64')
+        } else if (platform === 'darwin') {
           expect(runtimes[0].CC).toBe('clang')
           expect(runtimes[0].GOGCCFLAGS).toBe('-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fno-common')
           expect(runtimes[0].CXX).toBe('clang++')
         } else if (os.platform() === 'linux') {
-          expect(runtimes[0].GOROOT).toBe('/usr/local/go')
-          expect(runtimes[0].GOTOOLDIR).toBe('/usr/local/go/pkg/tool/linux_amd64')
           expect(runtimes[0].CC).toBe('gcc')
           expect(runtimes[0].GOGCCFLAGS).toBe('-fPIC -m64 -pthread -fmessage-length=0')
           expect(runtimes[0].CXX).toBe('g++')
@@ -263,19 +289,15 @@ describe('Locator', () => {
     it('findTool() finds the go tool', () => {
       expect(locator.findTool).toBeDefined()
       let tool = null
-      let done = locator.findTool('go', false, null).then((t) => { tool = t })
+      let err = null
+      let done = locator.findTool('go', false, null).then((t) => { tool = t }).catch((e) => { err = e })
 
       waitsForPromise(() => { return done })
 
       runs(() => {
+        expect(err).toBe(null)
         expect(tool).toBeTruthy()
-        if (os.platform() === 'win32') {
-          expect(tool).toBe('c:\\go\\bin\\go.exe')
-        } else if (os.platform() === 'darwin') {
-          expect(tool).toBe('/usr/local/Cellar/go/1.5.1/libexec/bin/go')
-        } else if (os.platform() === 'linux') {
-          expect(tool).toBe('/usr/local/go/bin/go')
-        }
+        expect(tool).toBe(path.join(gorootbindir, 'go' + executableSuffix))
       })
     })
 

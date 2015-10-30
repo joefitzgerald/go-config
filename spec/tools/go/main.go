@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
+	"runtime"
 	"strings"
 )
 
@@ -59,6 +61,11 @@ func readGo() Go {
 }
 
 func printEnv(g *Go) {
+	goroot := os.Getenv("GOROOT")
+	if goroot == "" {
+		goroot = g.GOROOT
+	}
+
 	env := []envVar{
 		{"GOARCH", g.GOARCH},
 		{"GOBIN", g.GOBIN},
@@ -68,8 +75,8 @@ func printEnv(g *Go) {
 		{"GOOS", g.GOOS},
 		{"GOPATH", os.Getenv("GOPATH")},
 		{"GORACE", os.Getenv("GORACE")},
-		{"GOROOT", g.GOROOT},
-		{"GOTOOLDIR", g.GOTOOLDIR},
+		{"GOROOT", goroot},
+		{"GOTOOLDIR", path.Join(goroot, "pkg", "tool", runtime.GOOS+"_"+runtime.GOARCH)},
 		{"GO15VENDOREXPERIMENT", os.Getenv("GO15VENDOREXPERIMENT")},
 	}
 
