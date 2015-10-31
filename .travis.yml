@@ -21,6 +21,7 @@ env:
   - APM_TEST_PACKAGES="environment"
 
 script:
+  - eval "$(gimme 1.5.1)"
   - pushd $TRAVIS_BUILD_DIR
   - export DISPLAY=":99"
   - ./build-package.sh
