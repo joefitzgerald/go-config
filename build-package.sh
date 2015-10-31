@@ -17,6 +17,7 @@ then
     export ATOM_SH=./atom/Atom.app/Contents/Resources/app/atom.sh
     export APM_SH=./atom/Atom.app/Contents/Resources/app/apm/node_modules/.bin/apm
 else
+    sudo apt-get update -qq
     sudo apt-get install build-essential -qq
     sudo apt-get install git -qq
     sudo apt-get install libgnome-keyring-dev -qq
@@ -34,9 +35,10 @@ else
     sudo apt-get install xdg-utils -qq
     sudo apt-get install libcap2 -qq
     sudo apt-get install gdebi-core -qq
+    sudo apt-get update -qq
     sudo gdebi -n atom.deb
-    export ATOM_SH="atom"
-    export APM_SH="apm"
+    export ATOM_SH="/usr/bin/atom"
+    export APM_SH="/usr/bin/apm"
 fi
 
 
