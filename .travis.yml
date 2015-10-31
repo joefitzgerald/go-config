@@ -5,8 +5,6 @@ notifications:
     on_success: never
     on_failure: change
 
-sudo: required
-
 os:
   - linux
   - osx
@@ -21,9 +19,6 @@ env:
   - APM_TEST_PACKAGES="environment"
 
 script:
-  - eval "$(gimme 1.5.1)"
-  - which go
-  - set
   - pushd $TRAVIS_BUILD_DIR
   - export DISPLAY=":99"
   - ./build-package.sh
