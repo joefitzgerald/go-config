@@ -22,6 +22,8 @@ env:
 
 script:
   - eval "$(gimme 1.5.1)"
+  - which go
+  - set
   - pushd $TRAVIS_BUILD_DIR
   - export DISPLAY=":99"
   - ./build-package.sh
