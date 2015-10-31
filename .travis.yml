@@ -5,6 +5,8 @@ notifications:
     on_success: never
     on_failure: change
 
+sudo: required
+
 os:
   - linux
   - osx
