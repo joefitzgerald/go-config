@@ -250,6 +250,10 @@ describe('Locator', () => {
       runs(() => {
         expect(runtimes).toBeTruthy()
         expect(runtimes.length).toBeGreaterThan(1)
+        console.log(runtimes)
+        console.log(runtimes[0])
+        console.log(runtimes[0].path)
+        console.log(godir)
         expect(runtimes[0].name).toBe('go1.5.1')
         expect(runtimes[0].semver).toBe('1.5.1')
         expect(runtimes[0].version).toBe('go version go1.5.1 ' + platform + '/' + arch)
