@@ -20,9 +20,6 @@ go:
 env:
   - APM_TEST_PACKAGES="environment"
 
-before_install:
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
-
 script:
   - pushd $TRAVIS_BUILD_DIR
   - export DISPLAY=":99"

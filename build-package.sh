@@ -17,6 +17,7 @@ then
     export ATOM_SH=./atom/Atom.app/Contents/Resources/app/atom.sh
     export APM_SH=./atom/Atom.app/Contents/Resources/app/apm/node_modules/.bin/apm
 else
+    /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
     sudo apt-get update -qq
     sudo apt-get install build-essential -qq
     sudo apt-get install git -qq
