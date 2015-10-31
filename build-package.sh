@@ -17,7 +17,23 @@ then
     export ATOM_SH=./atom/Atom.app/Contents/Resources/app/atom.sh
     export APM_SH=./atom/Atom.app/Contents/Resources/app/apm/node_modules/.bin/apm
 else
-    sudo apt-get install gdebi-core
+    sudo apt-get install build-essential -qq
+    sudo apt-get install git -qq
+    sudo apt-get install libgnome-keyring-dev -qq
+    sudo apt-get install fakeroot -qq
+    sudo apt-get install gconf2 -qq
+    sudo apt-get install gconf-service -qq
+    sudo apt-get install libgtk2.0-0 -qq
+    sudo apt-get install libudev1 -qq
+    sudo apt-get install libgcrypt20 -qq
+    sudo apt-get install libnotify4 -qq
+    sudo apt-get install libxtst6 -qq
+    sudo apt-get install libnss3 -qq
+    sudo apt-get install python -qq
+    sudo apt-get install gvfs-bin -qq
+    sudo apt-get install xdg-utils -qq
+    sudo apt-get install libcap2 -qq
+    sudo apt-get install gdebi-core -qq
     sudo gdebi -n atom.deb
     export ATOM_SH="atom"
     export APM_SH="apm"
