@@ -250,11 +250,6 @@ describe('Locator', () => {
       runs(() => {
         expect(runtimes).toBeTruthy()
         expect(runtimes.length).toBeGreaterThan(0)
-        console.log(runtimes)
-        console.log(runtimes.length)
-        console.log(runtimes[0])
-        console.log(runtimes[0].path)
-        console.log(godir)
         expect(runtimes[0].name).toBe('go1.5.1')
         expect(runtimes[0].semver).toBe('1.5.1')
         expect(runtimes[0].version).toBe('go version go1.5.1 ' + platform + '/' + arch)
@@ -355,6 +350,73 @@ describe('Locator', () => {
           let done = locator.findTool(toolItem, false, null).then((t) => { tool = t })
           waitsForPromise(() => { return done })
 
+          runs(() => {
+            expect(tool).toBeTruthy()
+            expect(tool).toBe(toolPath)
+          })
+        }
+      })
+    })
+  })
+
+  describe('when the path includes a directory with the gometalinter tool in it', () => {
+    let gopathdir = null
+    let gopathbindir = null
+    let pathdir = null
+    let pathtools = null
+    let gopathbintools = null
+    beforeEach(() => {
+      pathtools = ['gometalinter', 'gb']
+      gopathbintools = ['somerandomtool', 'gb']
+      pathdir = temp.mkdirSync('path-')
+      gopathdir = temp.mkdirSync('gopath-')
+      gopathbindir = path.join(gopathdir, 'bin')
+      fs.mkdirSync(gopathbindir)
+      env['GOPATH'] = gopathdir
+      env[pathkey] = pathdir + path.delimiter + env['PATH']
+      for (let tool of pathtools) {
+        touch.sync(path.join(pathdir, tool + executableSuffix))
+      }
+      for (let tool of gopathbintools) {
+        touch.sync(path.join(gopathbindir, tool + executableSuffix))
+      }
+    })
+
+    it('findTool() finds tools in PATH', () => {
+      runs(() => {
+        for (let toolItem of pathtools) {
+          let toolPath = false
+          let tool = null
+          let done = null
+
+          if (gopathbintools.indexOf(toolItem) !== -1) {
+            toolPath = path.join(gopathbindir, toolItem + executableSuffix)
+          } else {
+            toolPath = path.join(pathdir, toolItem + executableSuffix)
+          }
+
+          done = locator.findTool(toolItem, false, null).then((t) => {
+            tool = t
+          })
+          waitsForPromise(() => { return done })
+          runs(() => {
+            done = null
+            expect(tool).toBeTruthy()
+            expect(tool).toBe(toolPath)
+          })
+        }
+      })
+    })
+
+    it('findTool() finds tools in GOPATH\'s bin directory', () => {
+      runs(() => {
+        for (let toolItem of gopathbintools) {
+          let tool = null
+          let toolPath = false
+          let done = null
+          toolPath = path.join(gopathbindir, toolItem + executableSuffix)
+          done = locator.findTool(toolItem, false, null).then((t) => { tool = t })
+          waitsForPromise(() => { return done })
           runs(() => {
             expect(tool).toBeTruthy()
             expect(tool).toBe(toolPath)
