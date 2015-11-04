@@ -34,7 +34,12 @@ describe('Locator', () => {
     if (process.arch === 'arm') {
       arch = 'arm'
     } else if (process.arch === 'ia32') {
-      arch = '386'
+      // Ugh, Atom is 32-bit on Windows... for now.
+      if (platform === 'win32') {
+        arch = 'amd64'
+      } else {
+        arch = '386'
+      }
     } else {
       arch = 'amd64'
     }
