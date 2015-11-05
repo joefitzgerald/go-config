@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 	"runtime"
 	"strings"
 )
@@ -76,7 +76,7 @@ func printEnv(g *Go) {
 		{"GOPATH", os.Getenv("GOPATH")},
 		{"GORACE", os.Getenv("GORACE")},
 		{"GOROOT", goroot},
-		{"GOTOOLDIR", path.Join(goroot, "pkg", "tool", runtime.GOOS+"_"+runtime.GOARCH)},
+		{"GOTOOLDIR", filepath.Join(goroot, "pkg", "tool", runtime.GOOS+"_"+runtime.GOARCH)},
 		{"GO15VENDOREXPERIMENT", os.Getenv("GO15VENDOREXPERIMENT")},
 	}
 
