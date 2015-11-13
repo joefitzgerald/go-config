@@ -38,23 +38,15 @@ describe('executor', () => {
 
   describe('when asynchronously executing a command', () => {
     it('succeeds', () => {
-      let complete = false
-      runs(() => {
-        let command = 'env'
-        if (os.platform() === 'win32') {
-          command = path.resolve(__dirname, 'tools', 'env', 'env_windows_amd64.exe')
-        }
-        let done = (r, e) => {
+      let command = 'env'
+      if (os.platform() === 'win32') {
+        command = path.resolve(__dirname, 'tools', 'env', 'env_windows_amd64.exe')
+      }
+
+      waitsForPromise(() => {
+        return executor.exec(command, prefix, null, []).then((r) => {
           result = r
-          error = e
-          complete = true
-        }
-
-        executor.exec(command, prefix, null, done, [])
-      })
-
-      waitsFor(() => {
-        return complete === true
+        }).catch((e) => { error = e })
       })
 
       runs(() => {
@@ -66,28 +58,21 @@ describe('executor', () => {
         expect(result.stderr).toBeDefined()
         expect(result.stderr).toBe('')
 
+        expect(result.error).toBeFalsy()
         expect(error).toBeFalsy()
       })
     })
 
     it('sets the working directory correctly', () => {
-      let complete = false
-      runs(() => {
-        let command = 'pwd'
-        if (os.platform() === 'win32') {
-          command = path.resolve(__dirname, 'tools', 'pwd', 'pwd_windows_amd64.exe')
-        }
-        let done = (r, e) => {
+      let command = 'pwd'
+      if (os.platform() === 'win32') {
+        command = path.resolve(__dirname, 'tools', 'pwd', 'pwd_windows_amd64.exe')
+      }
+
+      waitsForPromise(() => {
+        return executor.exec(command, pathhelper.home(), null, []).then((r) => {
           result = r
-          error = e
-          complete = true
-        }
-
-        executor.exec(command, pathhelper.home(), null, done, [])
-      })
-
-      waitsFor(() => {
-        return complete === true
+        }).catch((e) => { error = e })
       })
 
       runs(() => {
@@ -99,29 +84,22 @@ describe('executor', () => {
         expect(result.stderr).toBeDefined()
         expect(result.stderr).toBe('')
 
+        expect(result.error).toBeFalsy()
         expect(error).toBeFalsy()
       })
     })
 
     it('sets the environment correctly', () => {
-      let complete = false
-      runs(() => {
-        let command = 'env'
-        if (os.platform() === 'win32') {
-          command = path.resolve(__dirname, 'tools', 'env', 'env_windows_amd64.exe')
-        }
-        let done = (r, e) => {
+      let command = 'env'
+      if (os.platform() === 'win32') {
+        command = path.resolve(__dirname, 'tools', 'env', 'env_windows_amd64.exe')
+      }
+      let env = {testenv: 'testing'}
+
+      waitsForPromise(() => {
+        return executor.exec(command, null, env, null).then((r) => {
           result = r
-          error = e
-          complete = true
-        }
-        let env = {testenv: 'testing'}
-
-        executor.exec(command, null, env, done, null)
-      })
-
-      waitsFor(() => {
-        return complete === true
+        }).catch((e) => { error = e })
       })
 
       runs(() => {
@@ -133,28 +111,27 @@ describe('executor', () => {
         expect(result.stderr).toBeDefined()
         expect(result.stderr).toBe('')
 
+        expect(result.error).toBeFalsy()
         expect(error).toBeFalsy()
       })
     })
 
     it('handles and returns an ENOENT error if the command was not found', () => {
-      let complete = false
-      runs(() => {
-        let done = (r, e) => {
+      waitsForPromise(() => {
+        return executor.exec('nonexistentcommand', null, null, null).then((r) => {
           result = r
-          error = e
-          complete = true
-        }
-
-        executor.exec('nonexistentcommand', null, null, done, null)
-      })
-
-      waitsFor(() => {
-        return complete === true
+        }).catch((e) => { error = e })
       })
 
       runs(() => {
         expect(result).toBeDefined()
+        expect(result).toBeTruthy()
+        expect(result.error).toBeDefined()
+        expect(result.error).toBeTruthy()
+        expect(result.error.code).toBe('ENOENT')
+        expect(result.error.errno).toBe('ENOENT')
+        expect(result.error.message).toBe('spawn nonexistentcommand ENOENT')
+        expect(result.error.path).toBe('nonexistentcommand')
         expect(result.exitcode).toBeDefined()
         expect(result.exitcode).not.toBe(0)
         expect(result.exitcode).toBe(127)
@@ -162,13 +139,7 @@ describe('executor', () => {
         expect(result.stdout).toBe('')
         expect(result.stderr).toBeDefined()
         expect(result.stderr).toBe('')
-
-        expect(error).toBeDefined()
-        expect(error).toBeTruthy()
-        expect(error.code).toBe('ENOENT')
-        expect(error.errno).toBe('ENOENT')
-        expect(error.message).toBe('spawn nonexistentcommand ENOENT')
-        expect(error.path).toBe('nonexistentcommand')
+        expect(error).toBeFalsy()
       })
     })
   })
