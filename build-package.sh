@@ -1,7 +1,8 @@
 #!/bin/bash
 
 echo "Downloading latest Atom release..."
-[ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_URL=https://atom.io/download/mac?channel=beta || ATOM_DOWNLOAD_URL=https://atom.io/download/deb?channel=beta
+CHANNEL="${ATOM_CHANNEL:=stable}"
+[ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_URL="https://atom.io/download/mac?channel=$CHANNEL" || ATOM_DOWNLOAD_URL="https://atom.io/download/deb?channel=$CHANNEL"
 [ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_FILE=atom.zip || ATOM_DOWNLOAD_FILE=atom.deb
 
 curl -s -L "$ATOM_DOWNLOAD_URL" \
@@ -12,11 +13,19 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]
 then
     mkdir atom
     unzip -q atom.zip -d atom
-    export PATH=$PWD/atom/Atom\ Beta.app/Contents/Resources/app/apm/bin:$PATH
+    if [ "$CHANNEL" == "stable" ]
+    then
+      export ATOM_APPNAME="Atom.app"
+      export ATOM_SCRIPTNAME="atom"
+    else
+      export ATOM_APPNAME="Atom\ ${CHANNEL^}"
+      export ATOM_SCRIPTNAME="atom-$CHANNEL"
+    fi
+    export PATH=$PWD/atom/$ATOM_APPNAME/Contents/Resources/app/apm/bin:$PATH
     export ATOM_PATH=./atom
-    ln -s ./atom/Atom\ Beta.app/Contents/Resources/app/atom.sh ./atom-beta
-    export ATOM_SH=./atom-beta
-    export APM_SH=./atom/Atom\ Beta.app/Contents/Resources/app/apm/node_modules/.bin/apm
+    ln -s ./atom/$ATOM_APPNAME/Contents/Resources/app/atom.sh ./$ATOM_SCRIPTNAME
+    export ATOM_SH=./$ATOM_SCRIPTNAME
+    export APM_SH=./atom/$ATOM_APPNAME/Contents/Resources/app/apm/node_modules/.bin/apm
 else
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
     sudo apt-get update -qq
@@ -39,8 +48,16 @@ else
     sudo apt-get install gdebi-core -qq
     sudo apt-get update -qq
     sudo gdebi -n atom.deb
-    export ATOM_SH="/usr/bin/atom-beta"
-    export APM_SH="/usr/bin/apm-beta"
+    if [ "$CHANNEL" == "stable" ]
+    then
+      export ATOM_SCRIPTNAME="atom"
+      export APM_SCRIPTNAME="apm"
+    else
+      export ATOM_SCRIPTNAME="atom-$CHANNEL"
+      export APM_SCRIPTNAME="apm-$CHANNEL"
+    fi
+    export ATOM_SH="/usr/bin/$ATOM_SCRIPTNAME"
+    export APM_SH="/usr/bin/$APM_SCRIPTNAME"
 fi
 
 
@@ -100,5 +117,5 @@ if [ -f ./node_modules/.bin/standard ]; then
 fi
 
 echo "Running specs..."
-/bin/bash "$ATOM_SH" --dev --test spec
+/bin/bash "$ATOM_SH" --test spec
 exit

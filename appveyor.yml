@@ -23,7 +23,7 @@ build_script:
   - apm clean
   - apm install
   - apm install environment
-  - apm test
+  - atom --test spec
 
 test: off
 deploy: off
