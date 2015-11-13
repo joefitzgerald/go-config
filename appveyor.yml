@@ -15,7 +15,7 @@ init:
     }
 
 install:
-  - appveyor DownloadFile https://atom.io/download/windows -FileName AtomSetup.exe
+  - appveyor DownloadFile https://atom.io/download/windows?channel=beta -FileName AtomSetup.exe
   - AtomSetup.exe /silent
   - set PATH=%LOCALAPPDATA%\atom\bin;%GOPATH%\bin;c:\go\bin;%PATH%
   - rmdir c:\go /s /q

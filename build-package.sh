@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Downloading latest Atom release..."
-[ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_URL=https://atom.io/download/mac || ATOM_DOWNLOAD_URL=https://atom.io/download/deb
+[ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_URL=https://atom.io/download/mac?channel=beta || ATOM_DOWNLOAD_URL=https://atom.io/download/deb?channel=beta
 [ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_FILE=atom.zip || ATOM_DOWNLOAD_FILE=atom.deb
 
 curl -s -L "$ATOM_DOWNLOAD_URL" \
