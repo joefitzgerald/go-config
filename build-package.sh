@@ -2,8 +2,8 @@
 set -x
 
 echo "Downloading latest Atom release..."
-CHANNEL="${CI_ATOM_CHANNEL:=stable}"
-[ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_URL="https://atom.io/download/mac?channel=$CHANNEL" || ATOM_DOWNLOAD_URL="https://atom.io/download/deb?channel=$CHANNEL"
+CI_CHANNEL="${ATOM_CHANNEL:=stable}"
+[ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_URL="https://atom.io/download/mac?channel=$CI_CHANNEL" || ATOM_DOWNLOAD_URL="https://atom.io/download/deb?channel=$CI_CHANNEL"
 [ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_FILE=atom.zip || ATOM_DOWNLOAD_FILE=atom.deb
 
 curl -s -L "$ATOM_DOWNLOAD_URL" \
@@ -14,7 +14,6 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]
 then
     mkdir atom
     unzip -q atom.zip -d atom
-    export CI_ATOM_SH_STABLE=./atom/$CI_ATOM_APPNAME/Contents/Resources/app/atom.sh
     if [ "$CI_CHANNEL" == "stable" ]
     then
       export CI_ATOM_APPNAME="Atom.app"
@@ -53,13 +52,13 @@ else
     sudo apt-get install gdebi-core -qq
     sudo apt-get update -qq
     sudo gdebi -n atom.deb
-    if [ "$CHANNEL" == "stable" ]
+    if [ "$CI_CHANNEL" == "stable" ]
     then
       export CI_ATOM_SCRIPTNAME="atom"
       export CI_APM_SCRIPTNAME="apm"
     else
-      export CI_ATOM_SCRIPTNAME="atom-$CHANNEL"
-      export CI_APM_SCRIPTNAME="apm-$CHANNEL"
+      export CI_ATOM_SCRIPTNAME="atom-$CI_CHANNEL"
+      export CI_APM_SCRIPTNAME="apm-$CI_CHANNEL"
     fi
     export CI_ATOM_SH="/usr/bin/$CI_ATOM_SCRIPTNAME"
     export CI_APM_SH="/usr/bin/$CI_APM_SCRIPTNAME"
