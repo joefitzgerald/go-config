@@ -99,10 +99,5 @@ if [ -f ./node_modules/.bin/standard ]; then
 fi
 
 echo "Running specs..."
-if [ "$TRAVIS_OS_NAME" == "osx" ]
-then
-    /bin/bash "$APM_SH" test --path "$ATOM_SH"
-else
-    apm test
-fi
+/bin/bash "$ATOM_SH" --dev --test spec
 exit
