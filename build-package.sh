@@ -14,7 +14,8 @@ then
     unzip -q atom.zip -d atom
     export PATH=$PWD/atom/Atom\ Beta.app/Contents/Resources/app/apm/bin:$PATH
     export ATOM_PATH=./atom
-    export ATOM_SH=./atom/Atom\ Beta.app/Contents/Resources/app/atom.sh
+    ln -s ./atom/Atom\ Beta.app/Contents/Resources/app/atom.sh ./atom-beta
+    export ATOM_SH=./atom-beta
     export APM_SH=./atom/Atom\ Beta.app/Contents/Resources/app/apm/node_modules/.bin/apm
 else
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
