@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 
 echo "Downloading latest Atom release..."
 CI_CHANNEL="${ATOM_CHANNEL:=stable}"
@@ -67,6 +66,8 @@ fi
 
 echo "Using Atom version:"
 /bin/bash "$CI_ATOM_SH" -v
+echo "Using APM version:"
+/bin/bash "$CI_APM_SH" -v
 
 echo "Downloading package dependencies..."
 /bin/bash "$CI_APM_SH" clean
