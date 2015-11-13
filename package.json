@@ -1,24 +1,24 @@
 {
-  "name": "go-runtime",
-  "description": "Detects installed go (golang) runtime(s) and makes them available for use by other packages.",
+  "name": "go-config",
+  "description": "Detects installed go (golang) runtime(s), tools, and configuration, making them available for use by other packages.",
   "keywords": [
     "go",
     "golang",
     "gopath",
-    "gb",
-    "godep"
+    "runtime",
+    "config"
   ],
   "main": "./lib/main",
   "version": "0.2.0",
-  "repository": "https://github.com/joefitzgerald/go-runtime",
+  "repository": "https://github.com/joefitzgerald/go-config",
   "license": "Apache-2.0",
   "engines": {
     "atom": ">=1.1.0 <2.0.0"
   },
   "author": "Joe Fitzgerald <jfitzgerald@pivotal.io> (http://github.com/joefitzgerald)",
-  "homepage": "https://atom.io/packages/go-runtime",
+  "homepage": "https://atom.io/packages/go-config",
   "bugs": {
-    "url": "https://github.com/joefitzgerald/go-runtime/issues"
+    "url": "https://github.com/joefitzgerald/go-config/issues"
   },
   "dependencies": {
     "fs-plus": "^2.8.1",
@@ -37,7 +37,7 @@
     "touch": "^1.0.0"
   },
   "providedServices": {
-    "go.runtime": {
+    "go-config": {
       "versions": {
         "0.1.0": "provide"
       }

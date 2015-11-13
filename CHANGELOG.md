@@ -1,3 +1,3 @@
-## `go-runtime` Changelog
+## `go-config` Changelog
 
-Please visit [https://github.com/joefitzgerald/go-runtime/releases](https://github.com/joefitzgerald/go-runtime/releases) for the `go-runtime` changelog.
+Please visit [https://github.com/joefitzgerald/go-config/releases](https://github.com/joefitzgerald/go-config/releases) for the `go-config` changelog.

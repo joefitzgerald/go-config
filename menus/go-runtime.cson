@@ -2,18 +2,18 @@
   'atom-text-editor': [
     {
       'label': 'Detect Go Runtime(s)'
-      'command': 'go-runtime:detect'
+      'command': 'go-config:detect'
     }
   ]
 'menu': [
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'go-runtime'
+      'label': 'go-config'
       'submenu': [
         {
           'label': 'Detect Runtime(s)'
-          'command': 'go-runtime:detect'
+          'command': 'go-config:detect'
         }
       ]
     ]
