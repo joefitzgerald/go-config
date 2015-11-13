@@ -139,7 +139,7 @@ describe('executor', () => {
         expect(result.stdout).toBe('')
         expect(result.stderr).toBeDefined()
         if (os.platform() === 'win32') {
-          expect(result.stderr).toBe('\'nonexistentcommand\' is not recognized as an internal or external command, \r\noperable program or batch file. \r\n')
+          expect(result.stderr).toBe('\'nonexistentcommand\' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n')
         } else {
           expect(result.stderr).toBe('')
         }
