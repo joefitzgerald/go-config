@@ -12,10 +12,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]
 then
     mkdir atom
     unzip -q atom.zip -d atom
-    export PATH=$PWD/atom/Atom.app/Contents/Resources/app/apm/bin:$PATH
+    export PATH=$PWD/atom/Atom\ Beta.app/Contents/Resources/app/apm/bin:$PATH
     export ATOM_PATH=./atom
-    export ATOM_SH=./atom/Atom.app/Contents/Resources/app/atom.sh
-    export APM_SH=./atom/Atom.app/Contents/Resources/app/apm/node_modules/.bin/apm
+    export ATOM_SH=./atom/Atom\ Beta.app/Contents/Resources/app/atom-beta.sh
+    export APM_SH=./atom/Atom\ Beta.app/Contents/Resources/app/apm/node_modules/.bin/apm
 else
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
     sudo apt-get update -qq
@@ -38,8 +38,8 @@ else
     sudo apt-get install gdebi-core -qq
     sudo apt-get update -qq
     sudo gdebi -n atom.deb
-    export ATOM_SH="/usr/bin/atom"
-    export APM_SH="/usr/bin/apm"
+    export ATOM_SH="/usr/bin/atom-beta"
+    export APM_SH="/usr/bin/apm-beta"
 fi
 
 
