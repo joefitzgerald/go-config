@@ -17,19 +17,18 @@ then
     then
       export CI_ATOM_APPNAME="Atom.app"
       export CI_ATOM_SCRIPTNAME="atom.sh"
-      export CI_ATOM_SH=./atom/$CI_ATOM_APPNAME/Contents/Resources/app/atom.sh
+      export CI_ATOM_SH="./atom/$CI_ATOM_APPNAME/Contents/Resources/app/atom.sh"
     else
       export CI_CHANNEL_CAMELCASE="$(tr '[:lower:]' '[:upper:]' <<< ${CI_CHANNEL:0:1})${CI_CHANNEL:1}"
       export CI_ATOM_APPNAME="Atom\ $CI_CHANNEL_CAMELCASE.app"
       export CI_ATOM_SCRIPTNAME="atom-$CI_CHANNEL"
-      export CI_ATOM_SH=./atom/$CI_ATOM_APPNAME/Contents/Resources/app/atom-$CI_CHANNEL.sh
+      export CI_ATOM_SH="./atom/$CI_ATOM_APPNAME/Contents/Resources/app/atom-$CI_CHANNEL.sh"
       ln -s "./atom/$CI_ATOM_APPNAME/Contents/Resources/app/atom.sh" "$CI_ATOM_SH"
     fi
-    export PATH=$PWD/atom/$CI_ATOM_APPNAME/Contents/Resources/app/apm/bin:$PATH
-    export ATOM_PATH=./atom
-    ln -s ./atom/$CI_ATOM_APPNAME/Contents/Resources/app/atom.sh ./$CI_ATOM_SCRIPTNAME
-    export CI_ATOM_SH=./$CI_ATOM_SCRIPTNAME
-    export CI_APM_SH=./atom/$CI_ATOM_APPNAME/Contents/Resources/app/apm/node_modules/.bin/apm
+    export PATH="$PWD/atom/$CI_ATOM_APPNAME/Contents/Resources/app/apm/bin:$PATH"
+    export ATOM_PATH="./atom"
+    export CI_ATOM_SH="./$CI_ATOM_SCRIPTNAME"
+    export CI_APM_SH="./atom/$CI_ATOM_APPNAME/Contents/Resources/app/apm/node_modules/.bin/apm"
 else
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
     sudo apt-get update -qq
