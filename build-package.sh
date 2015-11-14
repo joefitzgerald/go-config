@@ -23,7 +23,7 @@ then
       export CI_CHANNEL_CAMELCASE="$(tr '[:lower:]' '[:upper:]' <<< ${CI_CHANNEL:0:1})${CI_CHANNEL:1}"
       export CI_ATOM_APPNAME="Atom ${CI_CHANNEL_CAMELCASE}.app"
       export CI_ATOM_SCRIPTNAME="atom-${CI_CHANNEL}"
-      export CI_ATOM_SH="./atom/${CI_ATOM_APPNAME}/Contents/Resources/app/atom-${CI_CHANNEL}.sh"
+      export CI_ATOM_SH="./atom-${CI_CHANNEL}.sh"
       ln -s "./atom/${CI_ATOM_APPNAME}/Contents/Resources/app/atom.sh" "${CI_ATOM_SH}"
     fi
     export PATH="$PWD/atom/${CI_ATOM_APPNAME}/Contents/Resources/app/apm/bin:$PATH"
