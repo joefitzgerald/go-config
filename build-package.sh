@@ -27,7 +27,6 @@ then
     fi
     export PATH="$PWD/atom/$CI_ATOM_APPNAME/Contents/Resources/app/apm/bin:$PATH"
     export ATOM_PATH="./atom"
-    export CI_ATOM_SH="./$CI_ATOM_SCRIPTNAME"
     export CI_APM_SH="./atom/$CI_ATOM_APPNAME/Contents/Resources/app/apm/node_modules/.bin/apm"
 else
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
