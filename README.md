@@ -3,3 +3,5 @@
 `go-config` detects your go installation(s), tool(s), and associated configuration. You can optionally configure the package to provide hints for go installations tools.
 
 This package provides an API via an Atom service. This API can be used by other packages that need to work with the `go` tool, other related tools (e.g. `gofmt`, `vet`, etc.) or `$GOPATH/bin` tools (e.g. `goimports`, `goreturns`, etc.).
+
+This package needs the [environment](https://atom.io/packages/environment) package installed to function correctly in all circumstances. If [environment](https://atom.io/packages/environment) is not installed, you may experience issues on OS X.
