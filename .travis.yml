@@ -23,7 +23,7 @@ env:
     - ATOM_CHANNEL=stable
 
 script:
-  - ./build-package.sh
+  - 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
 
 git:
   depth: 10
