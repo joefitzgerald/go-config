@@ -1,9 +1,8 @@
 #!/bin/bash
-set -x
 
 echo "Downloading latest Atom release..."
-CI_CHANNEL="${ATOM_CHANNEL:=stable}"
-[ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_URL="https://atom.io/download/mac?channel=$CI_CHANNEL" || ATOM_DOWNLOAD_URL="https://atom.io/download/deb?channel=$CI_CHANNEL"
+ATOM_CHANNEL="${ATOM_CHANNEL:=stable}"
+[ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_URL="https://atom.io/download/mac?channel=$ATOM_CHANNEL" || ATOM_DOWNLOAD_URL="https://atom.io/download/deb?channel=$ATOM_CHANNEL"
 [ "$TRAVIS_OS_NAME" == "osx" ] && ATOM_DOWNLOAD_FILE=atom.zip || ATOM_DOWNLOAD_FILE=atom.deb
 
 curl -s -L "$ATOM_DOWNLOAD_URL" \
@@ -14,16 +13,16 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]
 then
     mkdir atom
     unzip -q atom.zip -d atom
-    if [ "$CI_CHANNEL" == "stable" ]
+    if [ "$ATOM_CHANNEL" == "stable" ]
     then
       export CI_ATOM_APPNAME="Atom.app"
       export CI_ATOM_SCRIPTNAME="atom.sh"
       export CI_ATOM_SH="./atom/${CI_ATOM_APPNAME}/Contents/Resources/app/atom.sh"
     else
-      export CI_CHANNEL_CAMELCASE="$(tr '[:lower:]' '[:upper:]' <<< ${CI_CHANNEL:0:1})${CI_CHANNEL:1}"
-      export CI_ATOM_APPNAME="Atom ${CI_CHANNEL_CAMELCASE}.app"
-      export CI_ATOM_SCRIPTNAME="atom-${CI_CHANNEL}"
-      export CI_ATOM_SH="./atom-${CI_CHANNEL}"
+      export ATOM_CHANNEL_CAMELCASE="$(tr '[:lower:]' '[:upper:]' <<< ${ATOM_CHANNEL:0:1})${ATOM_CHANNEL:1}"
+      export CI_ATOM_APPNAME="Atom ${ATOM_CHANNEL_CAMELCASE}.app"
+      export CI_ATOM_SCRIPTNAME="atom-${ATOM_CHANNEL}"
+      export CI_ATOM_SH="./atom-${ATOM_CHANNEL}"
       ln -s "./atom/${CI_ATOM_APPNAME}/Contents/Resources/app/atom.sh" "${CI_ATOM_SH}"
     fi
     export PATH="$PWD/atom/${CI_ATOM_APPNAME}/Contents/Resources/app/apm/bin:$PATH"
@@ -31,6 +30,7 @@ then
     export CI_APM_SH="./atom/${CI_ATOM_APPNAME}/Contents/Resources/app/apm/node_modules/.bin/apm"
 else
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
+    export DISPLAY=":99"
     sudo apt-get update -qq
     sudo apt-get install build-essential -qq
     sudo apt-get install git -qq
@@ -51,13 +51,13 @@ else
     sudo apt-get install gdebi-core -qq
     sudo apt-get update -qq
     sudo gdebi -n atom.deb
-    if [ "$CI_CHANNEL" == "stable" ]
+    if [ "$ATOM_CHANNEL" == "stable" ]
     then
       export CI_ATOM_SCRIPTNAME="atom"
       export CI_APM_SCRIPTNAME="apm"
     else
-      export CI_ATOM_SCRIPTNAME="atom-$CI_CHANNEL"
-      export CI_APM_SCRIPTNAME="apm-$CI_CHANNEL"
+      export CI_ATOM_SCRIPTNAME="atom-$ATOM_CHANNEL"
+      export CI_APM_SCRIPTNAME="apm-$ATOM_CHANNEL"
     fi
     export CI_ATOM_SH="/usr/bin/$CI_ATOM_SCRIPTNAME"
     export CI_APM_SH="/usr/bin/$CI_APM_SCRIPTNAME"
