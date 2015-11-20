@@ -30,8 +30,7 @@ else
       -o "atom.deb"
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
     export DISPLAY=":99"
-    sudo gdebi -n atom.deb
-    sudo apt-get update -qq
+    dpkg-deb -x atom.deb "$HOME/atom"
     if [ "$ATOM_CHANNEL" == "stable" ]; then
       export ATOM_SCRIPT_NAME="atom"
       export APM_SCRIPT_NAME="apm"
@@ -39,8 +38,8 @@ else
       export ATOM_SCRIPT_NAME="atom-$ATOM_CHANNEL"
       export APM_SCRIPT_NAME="apm-$ATOM_CHANNEL"
     fi
-    export ATOM_SCRIPT_PATH="/usr/bin/$ATOM_SCRIPT_NAME"
-    export APM_SCRIPT_PATH="/usr/bin/$APM_SCRIPT_NAME"
+    export ATOM_SCRIPT_PATH="$HOME/atom/usr/bin/$ATOM_SCRIPT_NAME"
+    export APM_SCRIPT_PATH="$HOME/atom/usr/bin/$APM_SCRIPT_NAME"
 fi
 
 
