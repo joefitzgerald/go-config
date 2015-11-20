@@ -30,7 +30,6 @@ else
       -o "atom.deb"
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
     export DISPLAY=":99"
-    sudo apt-get install gdebi-core -qq
     sudo gdebi -n atom.deb
     sudo apt-get update -qq
     if [ "$ATOM_CHANNEL" == "stable" ]; then

@@ -3,11 +3,8 @@ notifications:
     on_success: never
     on_failure: change
 
-sudo: required
-
 os:
   - linux
-  - osx
 
 language: go
 
@@ -19,7 +16,6 @@ env:
     - APM_TEST_PACKAGES="environment"
 
   matrix:
-    - ATOM_CHANNEL=stable
     - ATOM_CHANNEL=beta
 
 script:
@@ -27,3 +23,12 @@ script:
 
 git:
   depth: 10
+
+addons:
+  apt:
+    packages:
+    - build-essential
+    - git
+    - libgnome-keyring-dev
+    - fakeroot
+    - gdebi-core
