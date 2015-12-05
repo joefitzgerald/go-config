@@ -26,6 +26,9 @@ describe('Locator', () => {
     temp.track()
     pathhelper = new PathHelper()
     env = process.env
+    if (isTruthy(env.GOROOT)) {
+      delete env.GOROOT
+    }
     environmentFn = () => {
       return env
     }
