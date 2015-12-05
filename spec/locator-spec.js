@@ -162,6 +162,41 @@ describe('Locator', () => {
     })
   })
 
+  describe('when GOROOT is set and the go tool is available within $GOROOT/bin', () => {
+    let godir = null
+    let go = null
+    let gorootgo = null
+    let gorootdir = null
+    let gorootbindir = null
+
+    beforeEach(() => {
+      gorootdir = temp.mkdirSync('goroot-')
+      gorootbindir = path.join(gorootdir, 'bin')
+      fs.mkdirSync(gorootbindir)
+      gorootgo = path.join(gorootbindir, 'go' + executableSuffix)
+      godir = temp.mkdirSync('go-')
+      go = path.join(godir, 'go' + executableSuffix)
+      fs.writeFileSync(gorootgo, '', {encoding: 'utf8', mode: 511})
+      fs.writeFileSync(go, '', {encoding: 'utf8', mode: 511})
+      env[pathkey] = godir
+      env.GOROOT = gorootdir
+      env.GOPATH = path.join('~', 'go')
+    })
+
+    afterEach(() => {
+      env.GOROOT = ''
+    })
+
+    it('runtimeCandidates() finds the runtime and orders the go in $GOROOT/bin before the go in PATH', () => {
+      expect(locator.runtimeCandidates).toBeDefined()
+      let candidates = locator.runtimeCandidates()
+      expect(candidates).toBeTruthy()
+      expect(candidates.length).toBeGreaterThan(0)
+      expect(candidates[0]).toBe(gorootgo)
+      expect(candidates[1]).toBe(go)
+    })
+  })
+
   describe('when the PATH has multiple directories with a go runtime in it', () => {
     let godir = null
     let go1dir = null
@@ -222,14 +257,16 @@ describe('Locator', () => {
       let fakeexecutable = 'go_' + platform + '_' + arch + executableSuffix
       let go151json = path.join(__dirname, 'fixtures', 'go-151-' + platform + '.json')
       let fakego = path.join(__dirname, 'tools', 'go', fakeexecutable)
-      go = path.join(godir, 'go' + executableSuffix)
+      go = path.join(gorootbindir, 'go' + executableSuffix)
       fs.copySync(fakego, go)
-      fs.copySync(go151json, path.join(godir, 'go.json'))
+      fs.copySync(go151json, path.join(gorootbindir, 'go.json'))
       env[pathkey] = godir
       env['GOPATH'] = gopathdir
       env['GOROOT'] = gorootdir
       for (let tool of gorootbintools) {
-        touch.sync(path.join(gorootbindir, tool + executableSuffix))
+        if (tool !== 'go') {
+          touch.sync(path.join(gorootbindir, tool + executableSuffix))
+        }
       }
       for (let tool of gotooldirtools) {
         let toolpath = path.join(gotooldir, tool + executableSuffix)
