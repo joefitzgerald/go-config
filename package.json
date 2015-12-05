@@ -9,7 +9,7 @@
     "config"
   ],
   "main": "./lib/main",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "repository": "https://github.com/joefitzgerald/go-config",
   "license": "Apache-2.0",
   "engines": {
@@ -37,7 +37,9 @@
     "temp": "^0.8.3",
     "touch": "^1.0.0"
   },
-  "package-deps": ["environment"],
+  "package-deps": [
+    "environment"
+  ],
   "providedServices": {
     "go-config": {
       "versions": {
