@@ -44,7 +44,7 @@ describe('executor', () => {
       }
 
       waitsForPromise(() => {
-        return executor.exec(command, prefix, null, []).then((r) => {
+        return executor.exec(command, [], {cwd: prefix}).then((r) => {
           result = r
         }).catch((e) => { error = e })
       })
@@ -70,7 +70,7 @@ describe('executor', () => {
       }
 
       waitsForPromise(() => {
-        return executor.exec(command, pathhelper.home(), null, []).then((r) => {
+        return executor.exec(command, [], {cwd: pathhelper.home()}).then((r) => {
           result = r
         }).catch((e) => { error = e })
       })
@@ -97,7 +97,7 @@ describe('executor', () => {
       let env = {testenv: 'testing'}
 
       waitsForPromise(() => {
-        return executor.exec(command, null, env, null).then((r) => {
+        return executor.exec(command, [], {env: env}).then((r) => {
           result = r
         }).catch((e) => { error = e })
       })
@@ -118,7 +118,7 @@ describe('executor', () => {
 
     it('handles and returns an ENOENT error if the command was not found', () => {
       waitsForPromise(() => {
-        return executor.exec('nonexistentcommand', null, null, null).then((r) => {
+        return executor.exec('nonexistentcommand', []).then((r) => {
           result = r
         }).catch((e) => { error = e })
       })
