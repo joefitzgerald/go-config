@@ -28,7 +28,7 @@
     "os-homedir": "^1.0.1"
   },
   "devDependencies": {
-    "fs-extra": "^0.24.0",
+    "fs-extra": "^0.26.3",
     "underscore-plus": "1.x",
     "eslint": "^1.5.0",
     "babel-eslint": "^4.1.3",
