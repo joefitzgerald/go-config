@@ -1,2 +1,2 @@
 'atom-workspace':
-  'ctrl-alt-shift-g d': 'go-config:detect'
+  'ctrl-alt-shift-g r': 'go-config:refresh'
