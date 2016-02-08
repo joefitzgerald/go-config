@@ -1,0 +1,5 @@
+{
+  "atom-workspace": {
+    "ctrl-alt-shift-g r": "go-config:refresh"
+  }
+}

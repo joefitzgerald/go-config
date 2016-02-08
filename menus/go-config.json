@@ -1,0 +1,12 @@
+{
+  "menu": [{
+      "label": "Packages",
+      "submenu": [{
+        "label": "go-config",
+        "submenu": [{
+            "label": "Refresh Go Configuration",
+            "command": "go-config:refresh"
+        }]
+      }]
+  }]
+}
