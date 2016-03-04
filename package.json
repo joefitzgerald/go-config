@@ -44,7 +44,8 @@
   "providedServices": {
     "go-config": {
       "versions": {
-        "0.1.0": "provide"
+        "1.0.0": "provide",
+        "0.1.0": "provide010"
       }
     }
   },
@@ -54,5 +55,6 @@
         "0.1.0": "consumeEnvironment"
       }
     }
-  }
+  },
+  "configSchema": {}
 }

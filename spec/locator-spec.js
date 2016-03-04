@@ -351,7 +351,7 @@ describe('Locator', () => {
       let runtime = false
       let tool = null
       let toolPath = false
-      let done = locator.runtimeForProject(false).then((r) => { runtime = r })
+      let done = locator.runtime(false, {}).then((r) => { runtime = r })
 
       waitsForPromise(() => { return done })
 
@@ -384,7 +384,7 @@ describe('Locator', () => {
     it('findTool() finds tools in GOTOOLDIR', () => {
       let tools = ['addr2line', 'cgo', 'dist', 'link', 'pack', 'trace', 'api', 'compile', 'doc', 'nm', 'pprof', 'vet', 'asm', 'cover', 'fix', 'objdump', 'yacc']
       let runtime = false
-      let done = locator.runtimeForProject(false).then((r) => { runtime = r })
+      let done = locator.runtime(false, {}).then((r) => { runtime = r })
 
       waitsForPromise(() => { return done })
 
