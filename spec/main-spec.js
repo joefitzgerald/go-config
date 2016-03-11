@@ -1,4 +1,5 @@
 'use babel'
+/* eslint-env jasmine */
 
 describe('go-config', () => {
   let goconfigMain = null

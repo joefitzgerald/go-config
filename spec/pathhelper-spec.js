@@ -1,4 +1,5 @@
 'use babel'
+/* eslint-env jasmine */
 
 import {PathHelper} from './../lib/pathhelper'
 import os from 'os'

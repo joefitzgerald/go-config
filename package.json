@@ -56,5 +56,11 @@
       }
     }
   },
-  "configSchema": {}
+  "configSchema": {},
+  "standard": {
+    "globals": [
+      "atom",
+      "waitsForPromise"
+    ]
+  }
 }

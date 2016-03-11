@@ -1,4 +1,5 @@
 'use babel'
+/* eslint-env jasmine */
 
 import {isTruthy} from './../lib/check'
 import {Executor} from './../lib/executor'
@@ -335,7 +336,7 @@ describe('Locator', () => {
       expect(locator.findTool).toBeDefined()
       let tool = null
       let err = null
-      let done = locator.findTool('go', false, null).then((t) => { tool = t }).catch((e) => { err = e })
+      let done = locator.findTool('go').then((t) => { tool = t }).catch((e) => { err = e })
 
       waitsForPromise(() => { return done })
 
@@ -351,7 +352,7 @@ describe('Locator', () => {
       let runtime = false
       let tool = null
       let toolPath = false
-      let done = locator.runtime(false, {}).then((r) => { runtime = r })
+      let done = locator.runtime().then((r) => { runtime = r })
 
       waitsForPromise(() => { return done })
 
@@ -360,7 +361,7 @@ describe('Locator', () => {
           tool = null
           done = null
           toolPath = path.join(runtime.GOROOT, 'bin', toolItem + runtime.GOEXE)
-          done = locator.findTool(toolItem, false, null).then((t) => { tool = t })
+          done = locator.findTool(toolItem).then((t) => { tool = t })
           waitsForPromise(() => { return done })
 
           runs(() => {
@@ -384,7 +385,7 @@ describe('Locator', () => {
     it('findTool() finds tools in GOTOOLDIR', () => {
       let tools = ['addr2line', 'cgo', 'dist', 'link', 'pack', 'trace', 'api', 'compile', 'doc', 'nm', 'pprof', 'vet', 'asm', 'cover', 'fix', 'objdump', 'yacc']
       let runtime = false
-      let done = locator.runtime(false, {}).then((r) => { runtime = r })
+      let done = locator.runtime().then((r) => { runtime = r })
 
       waitsForPromise(() => { return done })
 
@@ -392,7 +393,7 @@ describe('Locator', () => {
         for (let toolItem of tools) {
           let tool = null
           let toolPath = path.join(runtime.GOTOOLDIR, toolItem + runtime.GOEXE)
-          let done = locator.findTool(toolItem, false, null).then((t) => { tool = t })
+          let done = locator.findTool(toolItem).then((t) => { tool = t })
           waitsForPromise(() => { return done })
 
           runs(() => {
@@ -440,7 +441,7 @@ describe('Locator', () => {
             toolPath = path.join(pathdir, toolItem + executableSuffix)
           }
 
-          done = locator.findTool(toolItem, false, null).then((t) => {
+          done = locator.findTool(toolItem).then((t) => {
             tool = t
           })
           waitsForPromise(() => { return done })
@@ -460,7 +461,7 @@ describe('Locator', () => {
           let toolPath = false
           let done = null
           toolPath = path.join(gopathbindir, toolItem + executableSuffix)
-          done = locator.findTool(toolItem, false, null).then((t) => { tool = t })
+          done = locator.findTool(toolItem).then((t) => { tool = t })
           waitsForPromise(() => { return done })
           runs(() => {
             expect(tool).toBeTruthy()
