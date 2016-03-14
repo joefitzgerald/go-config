@@ -1,17 +1,15 @@
 'use babel'
 /* eslint-env jasmine */
 
-import {PathHelper} from './../lib/pathhelper'
+import pathhelper from './../lib/pathhelper'
 import os from 'os'
 import path from 'path'
 
 describe('pathhelper', () => {
-  let pathhelper = null
   let gopathToken = ''
 
   beforeEach(() => {
     runs(() => {
-      pathhelper = new PathHelper()
       gopathToken = '$GOPATH'
       if (os.platform() === 'win32') {
         gopathToken = '%GOPATH%'

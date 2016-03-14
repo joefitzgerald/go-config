@@ -3,7 +3,7 @@
 
 import {isTruthy} from './../lib/check'
 import {Executor} from './../lib/executor'
-import {PathHelper} from './../lib/pathhelper'
+import pathhelper from './../lib/pathhelper'
 import {Locator} from './../lib/locator'
 import temp from 'temp'
 import fs from 'fs-extra'
@@ -18,14 +18,12 @@ describe('Locator', () => {
   let platform = null
   let arch = null
   let executableSuffix = null
-  let pathhelper = null
   let pathkey = null
   let readyFn = null
   let locator = null
 
   beforeEach(() => {
     temp.track()
-    pathhelper = new PathHelper()
     env = process.env
     if (isTruthy(env.GOROOT)) {
       delete env.GOROOT

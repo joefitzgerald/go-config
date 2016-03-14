@@ -2,14 +2,13 @@
 /* eslint-env jasmine */
 
 import {Executor} from '../lib/executor'
-import {PathHelper} from './../lib/pathhelper'
+import pathhelper from './../lib/pathhelper'
 import os from 'os'
 import path from 'path'
 
 describe('executor', () => {
   let executor = null
   let prefix = null
-  let pathhelper = null
   let result = null
   let error = null
 
@@ -21,7 +20,6 @@ describe('executor', () => {
       if (os.platform() === 'win32') {
         prefix = 'C:\\'
       }
-      pathhelper = new PathHelper()
       executor = new Executor()
     })
   })
