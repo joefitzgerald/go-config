@@ -73,23 +73,6 @@ describe('go-config', () => {
       expect(provider.locator.runtimeCandidates).not.toBeDefined()
       expect(provider.environment).toBeDefined()
       expect(provider.environment()).toBeTruthy()
-      let p = false
-
-      waitsForPromise(() => {
-        p = provider.locator.runtimes().then((runtimes) => {
-          expect(runtimes.length).toBeGreaterThan(0)
-          return true
-        })
-        return p
-      })
-
-      waitsForPromise(() => {
-        p = provider.locator.runtime().then((runtime) => {
-          expect(runtime).toBeTruthy()
-          return true
-        })
-        return p
-      })
     })
   })
 

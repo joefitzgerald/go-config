@@ -19,7 +19,7 @@ describe('pathhelper', () => {
 
   describe('when working with a single-item path', () => {
     it('expands the path', () => {
-      let env = process.env
+      let env = Object.assign({}, process.env)
       env.GOPATH = '~' + path.sep + 'go'
 
       let result = pathhelper.expand(env, path.join('~', 'go', 'go', '..', 'bin', 'goimports'))
@@ -47,7 +47,7 @@ describe('pathhelper', () => {
 
   describe('when working with a multi-item path', () => {
     it('expands the path', () => {
-      let env = process.env
+      let env = Object.assign({}, process.env)
       env.GOPATH = '~' + path.sep + 'go' + path.delimiter + '~' + path.sep + 'othergo'
 
       let result = pathhelper.expand(env, path.join('~', 'go', 'go', '..', 'bin', 'goimports'))

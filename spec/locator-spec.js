@@ -24,7 +24,7 @@ describe('Locator', () => {
 
   beforeEach(() => {
     temp.track()
-    env = process.env
+    env = Object.assign({}, process.env)
     if (isTruthy(env.GOROOT)) {
       delete env.GOROOT
     }
