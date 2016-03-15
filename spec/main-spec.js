@@ -60,7 +60,7 @@ describe('go-config', () => {
       expect(goconfigMain.ready()).toBe(true)
     })
 
-    fit('provides a service', () => {
+    it('provides a service', () => {
       expect(goconfigMain.provide).toBeDefined()
       let provider = goconfigMain.provide()
       expect(provider).toBeTruthy()
