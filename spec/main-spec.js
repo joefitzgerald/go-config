@@ -60,7 +60,7 @@ describe('go-config', () => {
       expect(goconfigMain.ready()).toBe(true)
     })
 
-    it('provides a service', () => {
+    fit('provides a service', () => {
       expect(goconfigMain.provide).toBeDefined()
       let provider = goconfigMain.provide()
       expect(provider).toBeTruthy()
@@ -71,6 +71,8 @@ describe('go-config', () => {
       expect(provider.locator.gopath).toBeDefined()
       expect(provider.locator.findTool).toBeDefined()
       expect(provider.locator.runtimeCandidates).not.toBeDefined()
+      expect(provider.environment).toBeDefined()
+      expect(provider.environment()).toBeTruthy()
       let p = false
 
       waitsForPromise(() => {
