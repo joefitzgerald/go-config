@@ -1,6 +1,8 @@
 'use babel'
 /* eslint-env jasmine */
 
+import semver from 'semver'
+
 describe('go-config', () => {
   let goconfigMain = null
 
@@ -86,9 +88,11 @@ describe('go-config', () => {
       goconfigMain.environment = e
     })
 
-    it('is not ready', () => {
+    it('is not ready for Atom < 1.7.0', () => {
       expect(goconfigMain.ready).toBeDefined()
-      expect(goconfigMain.ready()).toBe(false)
+      if (semver.satisfies(semver.major(atom.appVersion) + '.' + semver.minor(atom.appVersion) + '.' + semver.patch(atom.appVersion), '<1.7.0')) {
+        expect(goconfigMain.ready()).toBe(false)
+      }
     })
 
     it('returns the process environment', () => {
