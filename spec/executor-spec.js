@@ -155,8 +155,8 @@ describe('executor', () => {
       }
 
       let result = executor.execSync(command)
-      expect(result.code).toBeDefined()
-      expect(result.code).toBe(0)
+      expect(result.exitcode).toBeDefined()
+      expect(result.exitcode).toBe(0)
       expect(result.stdout).toBeDefined()
       expect(result.stdout).not.toBe('')
       expect(result.stderr).toBeDefined()
@@ -166,8 +166,8 @@ describe('executor', () => {
 
     it('returns a message if the command was not found', () => {
       let result = executor.execSync('nonexistentcommand')
-      expect(result.code).toBeDefined()
-      expect(result.code).toBe(127)
+      expect(result.exitcode).toBeDefined()
+      expect(result.exitcode).toBe(127)
       expect(result.stdout).toBeDefined()
       expect(result.stdout).toBe('')
       expect(result.stderr).toBeDefined()
