@@ -9,7 +9,6 @@ import temp from 'temp'
 import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
-import touch from 'touch'
 
 describe('Locator', () => {
   let env = null
@@ -150,7 +149,7 @@ describe('Locator', () => {
     beforeEach(() => {
       godir = temp.mkdirSync('go-')
       go = path.join(godir, 'go' + executableSuffix)
-      fs.writeFileSync(go, '', {encoding: 'utf8', mode: 511})
+      fs.writeFileSync(go, '.', {encoding: 'utf8', mode: 511})
       env[pathkey] = godir
       env.GOPATH = path.join('~', 'go')
     })
@@ -178,8 +177,8 @@ describe('Locator', () => {
       gorootgo = path.join(gorootbindir, 'go' + executableSuffix)
       godir = temp.mkdirSync('go-')
       go = path.join(godir, 'go' + executableSuffix)
-      fs.writeFileSync(gorootgo, '', {encoding: 'utf8', mode: 511})
-      fs.writeFileSync(go, '', {encoding: 'utf8', mode: 511})
+      fs.writeFileSync(gorootgo, '.', {encoding: 'utf8', mode: 511})
+      fs.writeFileSync(go, '.', {encoding: 'utf8', mode: 511})
       env[pathkey] = godir
       env.GOROOT = gorootdir
       env.GOPATH = path.join('~', 'go')
@@ -209,8 +208,8 @@ describe('Locator', () => {
       go1dir = temp.mkdirSync('go1-')
       go = path.join(godir, 'go' + executableSuffix)
       go1 = path.join(go1dir, 'go' + executableSuffix)
-      fs.writeFileSync(go, '', {encoding: 'utf8', mode: 511})
-      fs.writeFileSync(go1, '', {encoding: 'utf8', mode: 511})
+      fs.writeFileSync(go, '.', {encoding: 'utf8', mode: 511})
+      fs.writeFileSync(go1, '.', {encoding: 'utf8', mode: 511})
       env[pathkey] = godir + path.delimiter + go1dir
     })
 
@@ -267,12 +266,12 @@ describe('Locator', () => {
       env['GOROOT'] = gorootdir
       for (let tool of gorootbintools) {
         if (tool !== 'go') {
-          touch.sync(path.join(gorootbindir, tool + executableSuffix))
+          fs.writeFileSync(path.join(gorootbindir, tool + executableSuffix), '.', {encoding: 'utf8', mode: 511})
         }
       }
       for (let tool of gotooldirtools) {
         let toolpath = path.join(gotooldir, tool + executableSuffix)
-        touch.sync(toolpath)
+        fs.writeFileSync(toolpath, '.', {encoding: 'utf8', mode: 511})
       }
     })
 
@@ -419,10 +418,10 @@ describe('Locator', () => {
       env['GOPATH'] = gopathdir
       env[pathkey] = pathdir + path.delimiter + env['PATH']
       for (let tool of pathtools) {
-        touch.sync(path.join(pathdir, tool + executableSuffix))
+        fs.writeFileSync(path.join(pathdir, tool + executableSuffix), '.', {encoding: 'utf8', mode: 511})
       }
       for (let tool of gopathbintools) {
-        touch.sync(path.join(gopathbindir, tool + executableSuffix))
+        fs.writeFileSync(path.join(gopathbindir, tool + executableSuffix), '.', {encoding: 'utf8', mode: 511})
       }
     })
 
