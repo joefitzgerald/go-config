@@ -10,7 +10,7 @@ skip_tags: true
 
 environment:
   GOPATH: c:\gopath
-  GOVERSION: 1.6
+  GOVERSION: 1.6.2
   APM_TEST_PACKAGES: environment
 
   matrix:
@@ -25,7 +25,7 @@ install:
   - go version
   - go env
   - mkdir c:\gopath
-  - ps: Install-Product node 5
+  - ps: Install-Product node 6
 
 build_script:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/atom/ci/master/build-package.ps1'))
