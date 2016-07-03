@@ -117,6 +117,28 @@ describe('Locator', () => {
       expect(locator.gopath).toBeDefined()
       expect(locator.gopath()).toBe(path.join(pathhelper.home(), 'go'))
     })
+
+    describe('when there is atom config for go-config.gopath', () => {
+      beforeEach(() => {
+        atom.config.set('go-config.gopath', '~/go2')
+      })
+
+      it('gopath() prioritizes the environment over the config', () => {
+        expect(locator.gopath).toBeDefined()
+        expect(locator.gopath()).toBe(path.join(pathhelper.home(), 'go'))
+      })
+    })
+
+    describe('when there is atom config for go-plus.gopath', () => {
+      beforeEach(() => {
+        atom.config.set('go-plus.gopath', '~/go2')
+      })
+
+      it('gopath() prioritizes the environment over the config', () => {
+        expect(locator.gopath).toBeDefined()
+        expect(locator.gopath()).toBe(path.join(pathhelper.home(), 'go'))
+      })
+    })
   })
 
   describe('when the environment has an empty GOPATH', () => {
@@ -130,6 +152,28 @@ describe('Locator', () => {
       expect(locator.gopath).toBeDefined()
       expect(locator.gopath()).toBe(false)
     })
+
+    describe('when there is atom config for go-config.gopath', () => {
+      beforeEach(() => {
+        atom.config.set('go-config.gopath', '~/go')
+      })
+
+      it('gopath() returns the expanded value for ~/go', () => {
+        expect(locator.gopath).toBeDefined()
+        expect(locator.gopath()).toBe(path.join(pathhelper.home(), 'go'))
+      })
+    })
+
+    describe('when there is atom config for go-plus.gopath', () => {
+      beforeEach(() => {
+        atom.config.set('go-plus.gopath', '~/go')
+      })
+
+      it('gopath() returns the expanded value for ~/go', () => {
+        expect(locator.gopath).toBeDefined()
+        expect(locator.gopath()).toBe(path.join(pathhelper.home(), 'go'))
+      })
+    })
   })
 
   describe('when the environment has a GOPATH that is whitespace', () => {
@@ -140,6 +184,28 @@ describe('Locator', () => {
     it('gopath() returns false', () => {
       expect(locator.gopath).toBeDefined()
       expect(locator.gopath()).toBe(false)
+    })
+
+    describe('when there is atom config for go-config.gopath', () => {
+      beforeEach(() => {
+        atom.config.set('go-config.gopath', '~/go')
+      })
+
+      it('gopath() returns the expanded value for ~/go', () => {
+        expect(locator.gopath).toBeDefined()
+        expect(locator.gopath()).toBe(path.join(pathhelper.home(), 'go'))
+      })
+    })
+
+    describe('when there is atom config for go-plus.gopath', () => {
+      beforeEach(() => {
+        atom.config.set('go-plus.gopath', '~/go')
+      })
+
+      it('gopath() returns the expanded value for ~/go', () => {
+        expect(locator.gopath).toBeDefined()
+        expect(locator.gopath()).toBe(path.join(pathhelper.home(), 'go'))
+      })
     })
   })
 

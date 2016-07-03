@@ -4,4 +4,6 @@
 
 This package provides an API via an Atom service. This API can be used by other packages that need to work with the `go` tool, other related tools (e.g. `gofmt`, `vet`, etc.) or `$GOPATH/bin` tools (e.g. `goimports`, `goreturns`, etc.).
 
-This package needs the [environment](https://atom.io/packages/environment) package installed to function correctly in all circumstances. If [environment](https://atom.io/packages/environment) is not installed, you may experience issues on OS X on versions of Atom < 1.7.0. You can safely uninstall environment for versions of Atom >= 1.7.0.
+## Configuration
+
+You can configure the GOPATH in the `go-config` package settings, however _it is not recommended_ to configure the package in this way. Please see https://github.com/joefitzgerald/go-config/wiki/GOPATH for further information.
