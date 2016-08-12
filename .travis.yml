@@ -8,6 +8,9 @@ matrix:
   allow_failures:
   - go: tip
   fast_finish: true
+  env:
+  - ATOM_CHANNEL=beta
+  - ATOM_CHANNEL=stable
 
 os:
   - linux
@@ -17,10 +20,6 @@ env:
   global:
     - APM_TEST_PACKAGES=""
     - ATOM_LINT_WITH_BUNDLED_NODE="false"
-
-  matrix:
-    - ATOM_CHANNEL=beta
-    - ATOM_CHANNEL=stable
 
 notifications:
   email:
