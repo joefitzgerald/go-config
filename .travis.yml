@@ -8,9 +8,6 @@ matrix:
   allow_failures:
   - go: tip
   fast_finish: true
-  env:
-  - ATOM_CHANNEL=beta
-  - ATOM_CHANNEL=stable
 
 os:
   - linux
@@ -20,15 +17,14 @@ env:
   global:
     - APM_TEST_PACKAGES=""
     - ATOM_LINT_WITH_BUNDLED_NODE="false"
+  matrix:
+    - ATOM_CHANNEL=beta
+    - ATOM_CHANNEL=stable
 
 notifications:
   email:
     on_success: never
     on_failure: change
-
-env:
-  global:
-    - APM_TEST_PACKAGES="environment"
 
 script:
   - 'curl -s https://raw.githubusercontent.com/Arcanemagus/ci/29a99724a44985dad4cb709c6556468b1b24ac04/build-package.sh | sh'
