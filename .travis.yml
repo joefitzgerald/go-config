@@ -1,30 +1,43 @@
-notifications:
-  email:
-    on_success: never
-    on_failure: change
+language: go
 
-sudo: false
+go:
+  - 1.6.3
+  - tip
+
+matrix:
+  allow_failures:
+  - go: tip
+  fast_finish: true
 
 os:
   - linux
   - osx
 
-language: go
-
-go:
-  - 1.6.2
-
 env:
   global:
-    - APM_TEST_PACKAGES="environment"
+    - APM_TEST_PACKAGES=""
+    - ATOM_LINT_WITH_BUNDLED_NODE="false"
 
   matrix:
     - ATOM_CHANNEL=beta
     - ATOM_CHANNEL=stable
 
-script:
-  - 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
+notifications:
+  email:
+    on_success: never
+    on_failure: change
 
+env:
+  global:
+    - APM_TEST_PACKAGES="environment"
+
+script:
+  - 'curl -s https://raw.githubusercontent.com/Arcanemagus/ci/29a99724a44985dad4cb709c6556468b1b24ac04/build-package.sh | sh'
+
+sudo: false
+
+git:
+  depth: 10
 
 addons:
   apt:
@@ -33,9 +46,6 @@ addons:
     - git
     - libgnome-keyring-dev
     - fakeroot
-
-git:
-  depth: 10
 
 branches:
   only:
