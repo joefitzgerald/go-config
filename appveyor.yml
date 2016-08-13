@@ -29,7 +29,7 @@ install:
   - ps: Install-Product node 6
 
 build_script:
-  - ps: iex ((new-object net.webclient).DownloadString('https://github.com/Arcanemagus/ci/blob/3bbbf397a9227b7fe093b19d523953055eaaeb26/build-package.ps1'))
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/Arcanemagus/ci/3bbbf397a9227b7fe093b19d523953055eaaeb26/build-package.ps1'))
 
 test: off
 deploy: off
