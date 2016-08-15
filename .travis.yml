@@ -35,7 +35,7 @@ install:
   - nvm use node
 
 script:
-  - 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
+  - 'curl -s https://raw.githubusercontent.com/atom/ci/7e3050fabc3403f5cf61fd7e87ba7a29d1c59371/build-package.sh | sh'
 
 sudo: false
 
