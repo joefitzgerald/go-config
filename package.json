@@ -26,12 +26,8 @@
     "semver": "^5.2.0"
   },
   "devDependencies": {
+    "standard": "^8.0.0-beta.4",
     "fs-extra": "^0.30.0",
-    "eslint": "3.2.2",
-    "babel-eslint": "^6.1.0",
-    "eslint-config-standard": "^5.3.5",
-    "eslint-plugin-standard": "^2.0.0",
-    "eslint-plugin-promise": "^2.0.1",
     "temp": "^0.8.3"
   },
   "providedServices": {
