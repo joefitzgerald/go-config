@@ -10,7 +10,7 @@ skip_tags: true
 
 environment:
   GOPATH: c:\gopath
-  GOVERSION: 1.6.3
+  GOVERSION: 1.7.0
   APM_TEST_PACKAGES:
   ATOM_LINT_WITH_BUNDLED_NODE: "false"
 
@@ -29,7 +29,7 @@ install:
   - ps: Install-Product node 6
 
 build_script:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/atom/ci/943a16cd32926bdfcca703f16ec6a958a2db38a5/build-package.ps1'))
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/joefitzgerald/ci/go-plus/build-package.ps1'))
 
 test: off
 deploy: off

@@ -1,7 +1,7 @@
 language: go
 
 go:
-  - 1.6.3
+  - 1.7.0
   - tip
 
 matrix:
@@ -35,7 +35,7 @@ install:
   - nvm use node
 
 script:
-  - 'curl -s https://raw.githubusercontent.com/atom/ci/943a16cd32926bdfcca703f16ec6a958a2db38a5/build-package.sh | sh'
+  - 'curl -s https://raw.githubusercontent.com/joefitzgerald/ci/go-plus/build-package.sh | sh'
 
 sudo: false
 
