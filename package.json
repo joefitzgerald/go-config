@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "fs-plus": "^2.9.2",
-    "lodash": "^4.16.2",
+    "lodash": "^4.17.0",
     "semver": "^5.3.0"
   },
   "devDependencies": {
